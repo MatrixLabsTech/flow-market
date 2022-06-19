@@ -1,5 +1,5 @@
-import FungibleToken from "./lib/FungibleToken.cdc"
-import NonFungibleToken from "./lib/NonFungibleToken.cdc"
+import FungibleToken from 0xf233dcee88fe0abe
+import NonFungibleToken from 0x1d7e57aa55817448
 
 pub contract MatrixMarketOpenOffer {
 
@@ -100,6 +100,7 @@ pub contract MatrixMarketOpenOffer {
         ) {
             pre {
                 rewardCapability.check(): "reward capability not valid"
+                cuts.length <= 10: "length of cuts too long"
             }
             self.vaultRefCapability = vaultRefCapability
             self.rewardCapability = rewardCapability
@@ -239,7 +240,7 @@ pub contract MatrixMarketOpenOffer {
 
         pub fun borrowOffer(bidId: UInt64): &Offer{OfferPublic}? {
             if self.bids[bidId] != nil {
-                return &self.bids[bidId] as! &Offer{OfferPublic}
+                return &self.bids[bidId] as! &Offer{OfferPublic}?
             } else {
                 return nil
             }
