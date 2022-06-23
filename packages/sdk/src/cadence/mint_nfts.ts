@@ -28,7 +28,7 @@ transaction(nftAdminAddress: Address, recipientBatch: [Address], subCollectionId
       let subCollectionId = subCollectionIdBatch[size - 1]
       let metadata = metadataBatch[size - 1]
       let recipient = recipientAccount.getCapability(MatrixMarket.CollectionPublicPath).borrow<&{NonFungibleToken.CollectionPublic}>() ?? panic("recipient collection not found")
-      self.minter.mintNFT(creator: self.creator, recipient: recipient, subCollectionId: subCollectionId, metadata: metadata)
+      self.minter.mintNFT(recipient: recipient, subCollectionId: subCollectionId, metadata: metadata)
       size = size - 1
     }
   }
