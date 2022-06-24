@@ -6,12 +6,10 @@ import _NFT_NAME_ from _NFT_ADDRESS_
 transaction(recipientBatch: [Address], subCollectionIdBatch: [String], metadataBatch: [{String:String}]) {
 
   let minter: &_NFT_NAME_.NFTMinter
-  let creator: AuthAccount
 
   prepare(acct: AuthAccount) {
     self.minter = acct.borrow<&_NFT_NAME_.NFTMinter>(from: _NFT_NAME_.MinterStoragePath)
             ?? panic("could not borrow minter reference")
-    self.creator = acct;
   }
 
   execute {
@@ -26,7 +24,7 @@ transaction(recipientBatch: [Address], subCollectionIdBatch: [String], metadataB
       let subCollectionId = subCollectionIdBatch[size - 1]
       let metadata = metadataBatch[size - 1]
       let recipient = recipientAccount.getCapability(_NFT_NAME_.CollectionPublicPath).borrow<&{NonFungibleToken.CollectionPublic}>() ?? panic("recipient collection not found")
-      self.minter.mintNFT(creator: self.creator, recipient: recipient, subCollectionId: subCollectionId, metadata: metadata)
+      self.minter.mintNFT(recipient: recipient, subCollectionId: subCollectionId, metadata: metadata)
       size = size - 1
     }
   }
