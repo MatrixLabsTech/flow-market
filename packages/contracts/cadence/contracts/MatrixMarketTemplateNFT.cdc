@@ -159,16 +159,16 @@ pub contract _NFT_NAME_ : NonFungibleToken {
         // mintNFT mints a new NFT with a new ID
         // and deposit it in the recipients collection using their collection reference
         pub fun mintNFT(
-            creator: AuthAccount,
             recipient: &{NonFungibleToken.CollectionPublic},
             subCollectionId: String,
             metadata: {String: String}
         ): &NonFungibleToken.NFT {
 
+            let creator = self.owner!.address
             // create a new NFT
             var newNFT <- create NFT(
                 id: _NFT_NAME_.totalSupply,
-                creator: creator.address,
+                creator: creator,
                 subCollectionId: subCollectionId,
                 metadata: metadata
             )
@@ -180,7 +180,7 @@ pub contract _NFT_NAME_ : NonFungibleToken {
 
             _NFT_NAME_.totalSupply = _NFT_NAME_.totalSupply + 1
 
-            emit Mint(id: tokenRef.id, creator: creator.address, metadata: metadata)
+            emit Mint(id: tokenRef.id, creator: creator, metadata: metadata)
 
             return tokenRef
         }

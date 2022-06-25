@@ -152,6 +152,12 @@ pub contract MatrixMarket : NonFungibleToken {
         return <- create Collection()
     }
 
+    // createNewMinter
+    // This allows everyone to mint and
+    // the owner will be creator of the nft
+    pub fun createNewMinter(): @NFTMinter {
+        return <- create NFTMinter()
+    }
     // Resource that an admin or something similar would own to be
     // able to mint new NFTs
     //
