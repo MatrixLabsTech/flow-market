@@ -34,7 +34,8 @@ export class MatrixMarketOpenOfferClient implements OpenOfferClient {
                     .put("0xFLOW_TOKEN_ADDRESS", "0x7e60df042a9c0868")
                     .put("0xNFT_ADDRESS", "0x7f3812b53dd4de20")
                     .put("0xOPENBID_ADDRESS", "0x7f3812b53dd4de20")
-                    .put("0xNON_FUNGIBLE_TOKEN_ADDRESS", "0x631e88ae7f1d7c20");
+                  .put("0xNFT_STOREFRONT", "0x7f3812b53dd4de20")
+                  .put("0xNON_FUNGIBLE_TOKEN_ADDRESS", "0x631e88ae7f1d7c20");
                 break;
             }
             case FlowEnv.flowMainnet: {
@@ -47,7 +48,8 @@ export class MatrixMarketOpenOfferClient implements OpenOfferClient {
                     .put("0xFLOW_TOKEN_ADDRESS", "0x1654653399040a61")
                     .put("0xNFT_ADDRESS", "")
                     .put("0xOPENBID_ADDRESS", "0x7f3812b53dd4de20")
-                    .put("0xNON_FUNGIBLE_TOKEN_ADDRESS", "0x1d7e57aa55817448");
+                  .put("0xNFT_STOREFRONT", "0x4eb8a10cb9f87357")
+                  .put("0xNON_FUNGIBLE_TOKEN_ADDRESS", "0x1d7e57aa55817448");
                 break;
             }
             case FlowEnv.localEmulator:
