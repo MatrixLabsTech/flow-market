@@ -11,14 +11,14 @@ import FUSD from 0xFUSD_ADDRESS
 import 0xsupportedNFTName from 0xsupportedNFTAddress
 import NFTStorefront from 0xNFT_STOREFRONT
 
-transaction(bidId: UInt64, openOfferAddress: Address, toDelist: UInt64?) {
+transaction(bidId: UInt64, openOfferAddress: Address) {
     let nft: @NonFungibleToken.NFT
     let receiver: &{FungibleToken.Receiver}
     let openOffer: &MatrixMarketOpenOffer.OpenOffer{MatrixMarketOpenOffer.OpenOfferPublic}
     let bid: &MatrixMarketOpenOffer.Offer{MatrixMarketOpenOffer.OfferPublic}
     
     let storefront: &NFTStorefront.Storefront
-
+    var toDelist: UInt64?
     prepare(acct: AuthAccount) {
         self.openOffer = getAccount(openOfferAddress)
             .getCapability<&MatrixMarketOpenOffer.OpenOffer{MatrixMarketOpenOffer.OpenOfferPublic}>(
@@ -32,6 +32,19 @@ transaction(bidId: UInt64, openOfferAddress: Address, toDelist: UInt64?) {
                     
         let nftId = self.bid.getDetails().nftId
         self.storefront = acct.borrow<&NFTStorefront.Storefront>(from: NFTStorefront.StorefrontStoragePath) ?? panic("can't borrow storefront")
+        let ids = self.storefront.getListingIDs()
+        var i = 0
+        self.toDelist = nil
+        while i < ids.length {
+            let listing = self.storefront.borrowListing(listingResourceID: ids[i])
+            ?? panic("No item with that ID")
+            let detail = listing.getDetails()
+            if(detail.nftType==Type<@0xsupportedNFTName.NFT>()&&detail.nftID==nftId){
+                self.toDelist = ids[i]
+                break
+            }
+            i = i + 1
+        }
         
         let nftCollection = acct.borrow<&0xsupportedNFTName.Collection>(
             from: 0xsupportedNFTName.CollectionStoragePath
@@ -57,8 +70,8 @@ transaction(bidId: UInt64, openOfferAddress: Address, toDelist: UInt64?) {
         let vault <- self.bid.purchase(item: <-self.nft)!
         self.receiver.deposit(from: <-vault)
         self.openOffer.cleanup(bidId: bidId)
-        if(toDelist != nil){
-            self.storefront.removeListing(listingResourceID: toDelist!)
+        if(self.toDelist != nil){
+            self.storefront.removeListing(listingResourceID: self.toDelist!)
         }
     }
 }`;

@@ -1,5 +1,4 @@
 import {checkOpenOffer} from '../cadence/openoffer/check_openoffer';
-import {getListingForBid} from '../cadence/openoffer/getListingForBid';
 import {FlowService} from './flow';
 import {MatrixMarket} from "./model";
 import {FlowEnv} from "./env";
@@ -129,20 +128,9 @@ export class MatrixMarketOpenOfferClient implements OpenOfferClient {
     
     public async acceptOffer(supportedNFTName: string, supportedNFTAddress: string, offerResourceId: number, openOfferAddress: string): Promise<string> {
         try {
-            const addr = await this.getCurrentAddress()
-            const res = await this.fcl.send([
-                this.fcl.script(getListingForBid),
-                this.fcl.args([this.fcl.arg(addr, t.Address),
-                this.fcl.arg(offerResourceId,t.UInt64),
-                this.fcl.arg(openOfferAddress,t.Address)]),
-                this.fcl.limit(2000)
-            ]);
-            const toDelist = this.fcl.decode(res);
-            console.log(`toDelist:`, toDelist);
             const response = await this.fcl.send([
                 this.fcl.transaction(acceptOffer.replace(/0xsupportedNFTName/g, supportedNFTName).replace(/0xsupportedNFTAddress/g, supportedNFTAddress)),
-                this.fcl.args([this.fcl.arg(offerResourceId, t.UInt64), this.fcl.arg(openOfferAddress, t.Address),
-                this.fcl.arg(toDelist,t.Optional(t.UInt64))]),
+                this.fcl.args([this.fcl.arg(offerResourceId, t.UInt64), this.fcl.arg(openOfferAddress, t.Address)]),
                 this.fcl.proposer(this.getAuth()),
                 this.fcl.authorizations([this.getAuth()]),
                 this.fcl.limit(2000),

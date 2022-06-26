@@ -1,6 +1,6 @@
 {
   "name": "@matrix-labs/matrix-marketplace-nft-sdk",
-  "version": "0.0.32",
+  "version": "0.0.33",
   "main": "./dist/index.js",
   "files": ["dist"],
   "license": "MIT",
