@@ -51,6 +51,8 @@ function App() {
   const checkNFTsCollection = async () => {
     let ret;
     const user = await fcl.currentUser().snapshot();
+    const info = await fcl.account(user.addr)
+    console.log(`info:`, info);
     //ret = await nftClient.checkNFTsCollection("0x445697f20309b7c0");
     ret = await nftClient.checkNFTsCollection(user.addr);
     console.log(ret);
@@ -67,7 +69,7 @@ function App() {
 
   const initNFTCollection = async () => {
     let ret;
-    ret = await nftClient.initNFTCollection();
+    ret = await nftClient.initNFTCollection().catch(e=>e);
     console.log(ret);
   };
 

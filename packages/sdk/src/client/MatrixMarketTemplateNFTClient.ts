@@ -5,14 +5,14 @@ import {templateNFTGetNFTsScript} from '../cadence/TemplateNFT/get_nfts';
 import {templateNFTInitNFTCollection} from '../cadence/TemplateNFT/init_nfts_collection';
 import {MatrixMarketTemplateNFT} from '../cadence/TemplateNFT/MatrixMarketTemplateNFT';
 import {templateNFTMintNFTs} from '../cadence/TemplateNFT/mint_nfts';
+import {BaseClient} from './BaseClient';
 import {FlowEnv} from './env';
 import {FlowService} from './flow';
 
 import {IBindConfigs} from './interfaces/NFTClient';
 import {TemplateNFTClient} from './interfaces/TemplateNFTClient';
 
-export class MatrixMarketTemplateNFTClient implements TemplateNFTClient {
-    private fcl: any;
+export class MatrixMarketTemplateNFTClient extends BaseClient implements TemplateNFTClient {
 
     private env: FlowEnv | undefined;
     
@@ -43,7 +43,7 @@ export class MatrixMarketTemplateNFTClient implements TemplateNFTClient {
                   .put('0xFUNGIBLE_TOKEN_ADDRESS', '0xf233dcee88fe0abe')
                   .put('0xFUSD_ADDRESS', '0x3c5959b568896393')
                   .put('0xFLOW_TOKEN_ADDRESS', '0x1654653399040a61')
-                  .put('0xNFT_ADDRESS', '')
+                  .put('0xNFT_ADDRESS', '0x2162bbe13ade251e')
                   .put('0xNON_FUNGIBLE_TOKEN_ADDRESS', '0x1d7e57aa55817448')
                   .put('0xMETADATA_VIEWS_ADDRESS', '0x1d7e57aa55817448');
                 break;
@@ -103,7 +103,7 @@ export class MatrixMarketTemplateNFTClient implements TemplateNFTClient {
     
     async deploy(NFTName: string): Promise<string> {
         try {
-            const response = await this.fcl.send([
+            const response = await this.send([
                 this.fcl.transaction(deployContract),
                 this.fcl.args([
                     this.fcl.arg(NFTName, t.String),
@@ -127,7 +127,7 @@ export class MatrixMarketTemplateNFTClient implements TemplateNFTClient {
     
     async mintNFTs(NFTName: string, NFTAddress: string, recipientBatch: string[], subCollectionIdBatch: string[], metadataBatch: Array<Array<{ key: string, value: string }>>): Promise<string> {
         try {
-            const response = await this.fcl.send([
+            const response = await this.send([
                 this.fcl.transaction(templateNFTMintNFTs.replace(/_NFT_NAME_/g, NFTName).replace(/_NFT_ADDRESS_/g, NFTAddress)),
                 this.fcl.args([this.fcl.arg(recipientBatch, t.Array(t.Address)), this.fcl.arg(subCollectionIdBatch, t.Array(t.String)), this.fcl.arg(metadataBatch, t.Array(t.Dictionary({
                     key: t.String,
@@ -151,7 +151,7 @@ export class MatrixMarketTemplateNFTClient implements TemplateNFTClient {
     
     async checkNFTsCollection(NFTName: string, NFTAddress: string, address: string): Promise<boolean> {
         try {
-            const response = await this.fcl.send([
+            const response = await this.send([
                 this.fcl.script(templateNFTCheckNFTsCollection.replace(/_NFT_NAME_/g, NFTName).replace(/_NFT_ADDRESS_/g, NFTAddress)),
                 this.fcl.args([this.fcl.arg(address, t.Address)]),
                 this.fcl.limit(1000)
@@ -165,7 +165,7 @@ export class MatrixMarketTemplateNFTClient implements TemplateNFTClient {
     
     async getNFTs(NFTName: string, NFTAddress: string, account: string): Promise<number[]> {
         try {
-            const response = await this.fcl.send([this.fcl.script(templateNFTGetNFTsScript.replace(/_NFT_NAME_/g, NFTName).replace(/_NFT_ADDRESS_/g, NFTAddress)), this.fcl.args([this.fcl.arg(account, t.Address)]), this.fcl.limit(2000)]);
+            const response = await this.send([this.fcl.script(templateNFTGetNFTsScript.replace(/_NFT_NAME_/g, NFTName).replace(/_NFT_ADDRESS_/g, NFTAddress)), this.fcl.args([this.fcl.arg(account, t.Address)]), this.fcl.limit(2000)]);
             
             return this.fcl.decode(response);
         } catch (error) {
@@ -176,7 +176,7 @@ export class MatrixMarketTemplateNFTClient implements TemplateNFTClient {
     
     async initNFTCollection(NFTName: string, NFTAddress: string): Promise<string> {
         try {
-            const response = await this.fcl.send([
+            const response = await this.send([
                 this.fcl.transaction(templateNFTInitNFTCollection.replace(/_NFT_NAME_/g, NFTName).replace(/_NFT_ADDRESS_/g, NFTAddress)),
                 this.fcl.proposer(this.getAuth()),
                 this.fcl.authorizations([this.getAuth()]),

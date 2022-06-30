@@ -14,14 +14,17 @@ transaction {
         // init Flow
         acct.link<&FungibleToken.Vault{FungibleToken.Receiver, FungibleToken.Balance}>
             (/public/flowTokenReceiver, target: /storage/flowTokenVault)
+        
+        acct.link<&FungibleToken.Vault{FungibleToken.Balance}>
+            (/public/flowTokenBalance, target: /storage/flowTokenVault)
             
         // init FUSD
         if acct.borrow<&FungibleToken.Vault>(from: /storage/fusdVault) == nil {
             acct.save(<- FUSD.createEmptyVault(), to: /storage/fusdVault)
         }
-        acct.link<&FungibleToken.Vault{FungibleToken.Receiver}>
+        acct.link<&FUSD.Vault{FungibleToken.Receiver}>
             (/public/fusdReceiver, target: /storage/fusdVault)
-        acct.link<&FungibleToken.Vault{FungibleToken.Balance}>
+        acct.link<&FUSD.Vault{FungibleToken.Balance}>
             (/public/fusdBalance, target: /storage/fusdVault)
             
         // init MatrixMarket

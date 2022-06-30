@@ -11,6 +11,12 @@ import MatrixMarketOpenOffer from 0xOPENBID_ADDRESS
 pub fun main(addr: Address): Bool {
     var ok = true
     
+    ok = getAccount(addr).getCapability<&{FungibleToken.Receiver}>(/public/flowTokenReceiver).check()
+    if(!ok){return false}
+    
+    ok = getAccount(addr).getCapability<&{FungibleToken.Balance}>(/public/flowTokenBalance).check()
+    if(!ok){return false}
+    
     ok = getAccount(addr).getCapability<&{FungibleToken.Receiver}>(/public/fusdReceiver).check()
     if(!ok){return false}
     

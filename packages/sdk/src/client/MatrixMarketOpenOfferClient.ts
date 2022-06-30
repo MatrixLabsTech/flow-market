@@ -1,4 +1,5 @@
 import {checkOpenOffer} from '../cadence/openoffer/check_openoffer';
+import {BaseClient} from './BaseClient';
 import {FlowService} from './flow';
 import {MatrixMarket} from "./model";
 import {FlowEnv} from "./env";
@@ -12,10 +13,8 @@ import {removeOpenOffer} from "../cadence/openoffer/remove_offer";
 import {IBindConfigs, OpenOfferClient} from "./interfaces/OpenOfferClient";
 import * as t from "@onflow/types";
 
-export class MatrixMarketOpenOfferClient implements OpenOfferClient {
-
-    private fcl: any;
-
+export class MatrixMarketOpenOfferClient extends BaseClient implements OpenOfferClient {
+    
     private env: FlowEnv | undefined;
     
     private currentAddress?: string;
@@ -47,8 +46,8 @@ export class MatrixMarketOpenOfferClient implements OpenOfferClient {
                     .put("0xFUNGIBLE_TOKEN_ADDRESS", "0xf233dcee88fe0abe")
                     .put("0xFUSD_ADDRESS", "0x3c5959b568896393")
                     .put("0xFLOW_TOKEN_ADDRESS", "0x1654653399040a61")
-                    .put("0xNFT_ADDRESS", "")
-                    .put("0xOPENBID_ADDRESS", "0x7f3812b53dd4de20")
+                    .put("0xNFT_ADDRESS", "0x2162bbe13ade251e")
+                    .put("0xOPENBID_ADDRESS", "0x2162bbe13ade251e")
                   .put("0xNFT_STOREFRONT", "0x4eb8a10cb9f87357")
                   .put("0xNON_FUNGIBLE_TOKEN_ADDRESS", "0x1d7e57aa55817448");
                 break;
@@ -113,7 +112,7 @@ export class MatrixMarketOpenOfferClient implements OpenOfferClient {
     
     public async checkOpenOffer(address: string): Promise<boolean> {
         try {
-            const response = await this.fcl.send([
+            const response = await this.send([
                 checkOpenOffer,
                 this.fcl.args([this.fcl.arg(address, t.Address)]),
                 this.fcl.limit(2000)
@@ -128,7 +127,7 @@ export class MatrixMarketOpenOfferClient implements OpenOfferClient {
     
     public async acceptOffer(supportedNFTName: string, supportedNFTAddress: string, offerResourceId: number, openOfferAddress: string): Promise<string> {
         try {
-            const response = await this.fcl.send([
+            const response = await this.send([
                 this.fcl.transaction(acceptOffer.replace(/0xsupportedNFTName/g, supportedNFTName).replace(/0xsupportedNFTAddress/g, supportedNFTAddress)),
                 this.fcl.args([this.fcl.arg(offerResourceId, t.UInt64), this.fcl.arg(openOfferAddress, t.Address)]),
                 this.fcl.proposer(this.getAuth()),
@@ -149,7 +148,7 @@ export class MatrixMarketOpenOfferClient implements OpenOfferClient {
 
     public async initOpenOffer(): Promise<string> {
         try {
-            const response = await this.fcl.send([
+            const response = await this.send([
                 initOpenOffer,
                 this.fcl.proposer(this.getAuth()),
                 this.fcl.authorizations([this.getAuth()]),
@@ -169,7 +168,7 @@ export class MatrixMarketOpenOfferClient implements OpenOfferClient {
 
     public async openOffer(supportedNFTName:string, supportedNFTAddress:string,nftId: number, amount: string, paymentToken: string, royaltyReceivers: string[], royaltyAmount: string[], expirationTime: string): Promise<string> {
         try {
-            const response = await this.fcl.send([
+            const response = await this.send([
                 this.fcl.transaction(openOffer.replace(/0xsupportedNFTName/g, supportedNFTName).replace(/0xsupportedNFTAddress/g, supportedNFTAddress)),
                 this.fcl.args([
                   this.fcl.arg(nftId, t.UInt64),
@@ -197,7 +196,7 @@ export class MatrixMarketOpenOfferClient implements OpenOfferClient {
 
     public async removeOffer(offerResourceId: number): Promise<string> {
         try {
-            const response = await this.fcl.send([
+            const response = await this.send([
                 removeOpenOffer,
                 this.fcl.args([this.fcl.arg(offerResourceId, t.UInt64)]),
                 this.fcl.proposer(this.getAuth()),
@@ -218,7 +217,7 @@ export class MatrixMarketOpenOfferClient implements OpenOfferClient {
 
     public async getOfferIds(account: string): Promise<number[]> {
         try {
-            const response = await this.fcl.send([getOfferIds, this.fcl.args([this.fcl.arg(account, t.Address)]), this.fcl.limit(2000)]);
+            const response = await this.send([getOfferIds, this.fcl.args([this.fcl.arg(account, t.Address)]), this.fcl.limit(2000)]);
             
             return this.fcl.decode(response);
         } catch (error) {
@@ -229,7 +228,7 @@ export class MatrixMarketOpenOfferClient implements OpenOfferClient {
 
     public async getOfferDetails(account: string, offerResourceId: number): Promise<string> {
         try {
-            const response = await this.fcl.send([getOfferDetails, this.fcl.args([this.fcl.arg(account, t.Address), this.fcl.arg(offerResourceId, t.UInt64)]), this.fcl.limit(2000)]);
+            const response = await this.send([getOfferDetails, this.fcl.args([this.fcl.arg(account, t.Address), this.fcl.arg(offerResourceId, t.UInt64)]), this.fcl.limit(2000)]);
             
             return this.fcl.decode(response);
         } catch (error) {

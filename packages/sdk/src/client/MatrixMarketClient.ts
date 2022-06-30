@@ -7,13 +7,14 @@ import {getNFTsScript} from '../cadence/get_nfts';
 import {initNFTCollection} from '../cadence/init_nfts_collection';
 import {initCommon} from '../cadence/initCommon';
 import {mintNFTs} from '../cadence/mint_nfts';
+import {BaseClient} from './BaseClient';
 import {FlowEnv} from './env';
 import {FlowService} from './flow';
 import {IBindConfigs, NFTClient} from './interfaces/NFTClient';
 
+const sleep=ms=>new Promise((resolve,reject)=>setTimeout(resolve,ms))
 
-export class MatrixMarketClient implements NFTClient {
-    private fcl: any;
+export class MatrixMarketClient extends BaseClient implements NFTClient {
     
     private env: FlowEnv | undefined;
     
@@ -22,6 +23,7 @@ export class MatrixMarketClient implements NFTClient {
     public async bindFcl(fcl: any, env: FlowEnv, config?: IBindConfigs): Promise<void> {
         this.env = env;
         this.fcl = fcl;
+        
         switch (env) {
             case FlowEnv.flowTestnet: {
                 await this.fcl
@@ -45,9 +47,9 @@ export class MatrixMarketClient implements NFTClient {
                   .put('0xFUNGIBLE_TOKEN_ADDRESS', '0xf233dcee88fe0abe')
                   .put('0xFUSD_ADDRESS', '0x3c5959b568896393')
                   .put('0xFLOW_TOKEN_ADDRESS', '0x1654653399040a61')
-                  .put('0xNFT_ADDRESS', '')
+                  .put('0xNFT_ADDRESS', '0x2162bbe13ade251e')
                   .put('0xNON_FUNGIBLE_TOKEN_ADDRESS', '0x1d7e57aa55817448')
-                  .put('0xOPENBID_ADDRESS', '0x7f3812b53dd4de20')
+                  .put('0xOPENBID_ADDRESS', '0x2162bbe13ade251e')
                   .put('0xNFT_STOREFRONT', '0x4eb8a10cb9f87357')
                 ;
                 break;
@@ -106,7 +108,7 @@ export class MatrixMarketClient implements NFTClient {
     
     public async mintNFTs(nftAdminAddress: string, recipientBatch: string[], subCollectionIdBatch: string[], metadataBatch: Array<Array<{ key: string, value: string }>>): Promise<string> {
         try {
-            const response = await this.fcl.send([
+            const response = await this.send([
                 mintNFTs,
                 this.fcl.args([this.fcl.arg(nftAdminAddress, t.Address), this.fcl.arg(recipientBatch, t.Array(t.Address)), this.fcl.arg(subCollectionIdBatch, t.Array(t.String)), this.fcl.arg(metadataBatch, t.Array(t.Dictionary({key: t.String, value: t.String})))]),
                 this.fcl.proposer(this.getAuth()),
@@ -127,7 +129,7 @@ export class MatrixMarketClient implements NFTClient {
     
     public async FLOWBalance(address: string): Promise<number> {
         try {
-            const response = await this.fcl.send([
+            const response = await this.send([
                 getFLOWBalanceScript,
                 this.fcl.args([this.fcl.arg(address, t.Address)]),
                 this.fcl.limit(1000)
@@ -141,7 +143,7 @@ export class MatrixMarketClient implements NFTClient {
 
     public async FUSDBalance(address: string): Promise<number> {
         try {
-            const response = await this.fcl.send([
+            const response = await this.send([
                 getFUSDBalanceScript,
                 this.fcl.args([this.fcl.arg(address, t.Address)]),
                 this.fcl.limit(1000)
@@ -155,7 +157,7 @@ export class MatrixMarketClient implements NFTClient {
 
     public async checkNFTsCollection(address: string): Promise<boolean> {
         try {
-            const response = await this.fcl.send([
+            const response = await this.send([
                 checkNFTsCollection,
                 this.fcl.args([this.fcl.arg(address, t.Address)]),
                 this.fcl.limit(1000)
@@ -169,7 +171,7 @@ export class MatrixMarketClient implements NFTClient {
     
     public async getNFTs(account: string): Promise<number[]> {
         try {
-            const response = await this.fcl.send([getNFTsScript, this.fcl.args([this.fcl.arg(account, t.Address)]), this.fcl.limit(2000)]);
+            const response = await this.send([getNFTsScript, this.fcl.args([this.fcl.arg(account, t.Address)]), this.fcl.limit(2000)]);
             
             return this.fcl.decode(response);
         } catch (error) {
@@ -180,7 +182,7 @@ export class MatrixMarketClient implements NFTClient {
 
     public async initNFTCollection(): Promise<string> {
         try {
-            const response = await this.fcl.send([
+            const response = await this.send([
                 initNFTCollection,
                 this.fcl.proposer(this.getAuth()),
                 this.fcl.authorizations([this.getAuth()]),
@@ -200,7 +202,7 @@ export class MatrixMarketClient implements NFTClient {
     
     async checkCommon(address: string): Promise<boolean> {
         try {
-            const response = await this.fcl.send([
+            const response = await this.send([
                 this.fcl.script(checkCommon),
                 this.fcl.args([this.fcl.arg(address, t.Address)]),
                 this.fcl.limit(1000)
@@ -214,7 +216,7 @@ export class MatrixMarketClient implements NFTClient {
     
     async initCommon(): Promise<string> {
         try {
-            const response = await this.fcl.send([
+            const response = await this.send([
                 this.fcl.transaction(initCommon),
                 this.fcl.proposer(this.getAuth()),
                 this.fcl.authorizations([this.getAuth()]),
