@@ -8,6 +8,8 @@ import FungibleToken from 0xFUNGIBLE_TOKEN_ADDRESS
 import NFTStorefront from 0xNFT_STOREFRONT
 import MatrixMarketOpenOffer from 0xOPENBID_ADDRESS
 import FUSD from 0xFUSD_ADDRESS
+import MetadataViews from 0xMETADATA_VIEWS_ADDRESS
+
 
 transaction {
     prepare(acct: AuthAccount) {
@@ -36,7 +38,7 @@ transaction {
         if acct.borrow<&MatrixMarket.Collection>(from: MatrixMarket.CollectionStoragePath) == nil {
             let collection <- MatrixMarket.createEmptyCollection() as! @MatrixMarket.Collection
             acct.save(<-collection, to: MatrixMarket.CollectionStoragePath)
-            acct.link<&{MatrixMarket.MatrixMarketCollectionPublic, NonFungibleToken.Receiver, NonFungibleToken.CollectionPublic}>(MatrixMarket.CollectionPublicPath, target: MatrixMarket.CollectionStoragePath)
+            acct.link<&{MatrixMarket.MatrixMarketCollectionPublic, NonFungibleToken.Receiver, NonFungibleToken.CollectionPublic, MetadataViews.ResolverCollection}>(MatrixMarket.CollectionPublicPath, target: MatrixMarket.CollectionStoragePath)
         }
         
         // init Storefront
