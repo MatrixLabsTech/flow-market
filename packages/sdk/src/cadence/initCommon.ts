@@ -27,11 +27,16 @@ transaction {
         acct.link<&FUSD.Vault{FungibleToken.Balance}>
             (/public/fusdBalance, target: /storage/fusdVault)
             
+        if acct.getCapability<&{NonFungibleToken.Provider}>(MatrixMarket.CollectionPublicPath).check(){
+            acct.unlink(MatrixMarket.CollectionPublicPath)
+            acct.link<&{MatrixMarket.MatrixMarketCollectionPublic, NonFungibleToken.Receiver, NonFungibleToken.CollectionPublic}>(MatrixMarket.CollectionPublicPath, target: MatrixMarket.CollectionStoragePath)
+        }
+        
         // init MatrixMarket
         if acct.borrow<&MatrixMarket.Collection>(from: MatrixMarket.CollectionStoragePath) == nil {
             let collection <- MatrixMarket.createEmptyCollection() as! @MatrixMarket.Collection
             acct.save(<-collection, to: MatrixMarket.CollectionStoragePath)
-            acct.link<&{MatrixMarket.MatrixMarketCollectionPublic,NonFungibleToken.Receiver,NonFungibleToken.Provider, NonFungibleToken.CollectionPublic}>(MatrixMarket.CollectionPublicPath, target: MatrixMarket.CollectionStoragePath)
+            acct.link<&{MatrixMarket.MatrixMarketCollectionPublic, NonFungibleToken.Receiver, NonFungibleToken.CollectionPublic}>(MatrixMarket.CollectionPublicPath, target: MatrixMarket.CollectionStoragePath)
         }
         
         // init Storefront

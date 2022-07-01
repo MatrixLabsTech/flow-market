@@ -23,6 +23,9 @@ pub fun main(addr: Address): Bool {
     ok = getAccount(addr).getCapability<&{FungibleToken.Balance}>(/public/fusdBalance).check()
     if(!ok){return false}
 
+    ok = !getAccount(addr).getCapability<&{NonFungibleToken.Provider}>(MatrixMarket.CollectionPublicPath).check()
+    if(!ok){return false}
+    
     ok = getAccount(addr).getCapability<&{NonFungibleToken.CollectionPublic}>(MatrixMarket.CollectionPublicPath).check()
     if(!ok){return false}
     

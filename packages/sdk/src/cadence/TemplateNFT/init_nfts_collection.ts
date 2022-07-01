@@ -16,7 +16,7 @@ transaction {
         if acct.borrow<&_NFT_NAME_.Collection>(from: _NFT_NAME_.CollectionStoragePath) == nil {
             let collection <- _NFT_NAME_.createEmptyCollection() as! @_NFT_NAME_.Collection
             acct.save(<-collection, to: _NFT_NAME_.CollectionStoragePath)
-            acct.link<&{_NFT_NAME_._NFT_NAME_CollectionPublic,NonFungibleToken.Receiver,NonFungibleToken.Provider, NonFungibleToken.CollectionPublic}>(_NFT_NAME_.CollectionPublicPath, target: _NFT_NAME_.CollectionStoragePath)
+            acct.link<&{_NFT_NAME_._NFT_NAME_CollectionPublic, NonFungibleToken.Receiver, NonFungibleToken.CollectionPublic}>(_NFT_NAME_.CollectionPublicPath, target: _NFT_NAME_.CollectionStoragePath)
         }
     }
 }`;
