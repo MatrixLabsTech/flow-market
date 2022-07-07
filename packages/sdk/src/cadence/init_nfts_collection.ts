@@ -6,6 +6,7 @@ import NonFungibleToken from 0xNON_FUNGIBLE_TOKEN_ADDRESS
 import MatrixMarket from 0xNFT_ADDRESS
 import FungibleToken from 0xFUNGIBLE_TOKEN_ADDRESS
 import FlowToken from 0xFLOW_TOKEN_ADDRESS
+import MetadataViews from 0xMETADATA_VIEWS_ADDRESS
 
 
 // Setup storage for MatrixMarket on signer account
@@ -16,7 +17,7 @@ transaction {
         if acct.borrow<&MatrixMarket.Collection>(from: MatrixMarket.CollectionStoragePath) == nil {
             let collection <- MatrixMarket.createEmptyCollection() as! @MatrixMarket.Collection
             acct.save(<-collection, to: MatrixMarket.CollectionStoragePath)
-            acct.link<&{MatrixMarket.MatrixMarketCollectionPublic,NonFungibleToken.Receiver,NonFungibleToken.Provider, NonFungibleToken.CollectionPublic}>(MatrixMarket.CollectionPublicPath, target: MatrixMarket.CollectionStoragePath)
+            acct.link<&{MatrixMarket.MatrixMarketCollectionPublic, NonFungibleToken.Receiver, NonFungibleToken.CollectionPublic, MetadataViews.ResolverCollection}>(MatrixMarket.CollectionPublicPath, target: MatrixMarket.CollectionStoragePath)
         }
     }
 }`;

@@ -32,17 +32,18 @@ transaction(bidId: UInt64, openOfferAddress: Address) {
                     
         let nftId = self.bid.getDetails().nftId
         self.storefront = acct.borrow<&NFTStorefront.Storefront>(from: NFTStorefront.StorefrontStoragePath) ?? panic("can't borrow storefront")
-        let ids = storefront.getListingIDs()
+        let ids = self.storefront.getListingIDs()
         var i = 0
         self.toDelist = nil
         while i < ids.length {
-            let listing = storefront.borrowListing(listingResourceID: ids[i])
+            let listing = self.storefront.borrowListing(listingResourceID: ids[i])
             ?? panic("No item with that ID")
             let detail = listing.getDetails()
             if(detail.nftType==Type<@0xsupportedNFTName.NFT>()&&detail.nftID==nftId){
                 self.toDelist = ids[i]
                 break
             }
+            i = i + 1
         }
         
         let nftCollection = acct.borrow<&0xsupportedNFTName.Collection>(

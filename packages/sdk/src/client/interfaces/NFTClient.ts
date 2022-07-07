@@ -18,4 +18,6 @@ export interface NFTClient {
     initNFTCollection(): Promise<string>;
     getNFTs(account: string): Promise<number[]>;
     mintNFTs(nftAdminAddress: string, recipientBatch: [string], subCollectionIdBatch: [string], metadataBatch: Array<Array<{ key: string, value: string }>>): Promise<string>;
+    checkCommon(address: string): Promise<boolean>;
+    initCommon(): Promise<string>;
 }
