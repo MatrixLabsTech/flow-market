@@ -94,11 +94,11 @@ export class BaseClient {
         ret = await this.fcl.send(...args);
         break;
       } catch (e: any) {
-        if (e.statusCode === 400) {
+        if (e.statusCode === 400 && e?.errorMessage?.includes?.('failed to get account from the execution node')) {
           if (i == 2) {
             throw e;
           }
-          console.log(`ignored e:`, e);
+          console.log(`ignored e:`, e, Object.assign({}, e));
           await sleep(1000);
         } else {
           throw e;
