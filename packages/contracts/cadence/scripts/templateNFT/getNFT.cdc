@@ -82,7 +82,7 @@ pub fun main(address: Address, id: UInt64): NFTData? {
             public_collection_name: "NonFungibleToken.CollectionPublic, NonFungibleToken.Receiver, _NFT_NAME_._NFT_NAME_CollectionPublic", // interfaces required for initialization
             external_domain: "https://matrixworld.org",
         )
-
+        let owner = getAccount(address)
         let col= owner
             .getCapability(_NFT_NAME_.CollectionPublicPath)
             .borrow<&{_NFT_NAME_._NFT_NAME_CollectionPublic, NonFungibleToken.CollectionPublic}>()
