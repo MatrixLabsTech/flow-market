@@ -97,6 +97,17 @@ pub fun main(address: Address, id: UInt64): NFTData? {
         for key in metadata.keys {
             rawMetadata.insert(key: key, metadata[key])
         }
+        let media: [NFTMedia] = []
+        if(metadata["displayUrl"] != nil && metadata["displayUrlMediaType"] != nil){
+            media.append(NFTMedia(uri: metadata["displayUrl"], mimetype: metadata["displayUrlMediaType"]))
+            if(metadata["contentUrl"] != nil && metadata["contentUrlMediaType"] != nil){
+                media.append(NFTMedia(uri: metadata["contentUrl"], mimetype: metadata["contentUrlMediaType"]))
+            }
+        }else if(metadata["imageUrl"] != nil){
+            media.append(NFTMedia(uri:metadata["imageUrl"], mimetype: "image"))
+        }else if(metadata["image"] != nil){
+            media.append(NFTMedia(uri:metadata["image"], mimetype: "image"))
+        }
 
         return NFTData(
             contract: contract,
@@ -105,11 +116,8 @@ pub fun main(address: Address, id: UInt64): NFTData? {
             title: metadata["name"],
             description: metadata["description"],
             external_domain_view_url: "https://matrixworld.org/profile",
-            token_uri: nil,
-            media: [
-                NFTMedia(uri: metadata["displayUrl"], mimetype: metadata["displayUrlMediaType"]),
-                NFTMedia(uri: metadata["contentUrl"], mimetype: metadata["contentUrlMediaType"])
-            ],
+            token_uri: metadata["token_uri"],
+            media: media,
             metadata: rawMetadata
         )
 }
