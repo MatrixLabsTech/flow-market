@@ -201,7 +201,7 @@ pub contract _NFT_NAME_ : NonFungibleToken {
         self.account.save(<-collection, to: self.CollectionStoragePath)
 
         // create a public capability for the collection
-        self.account.link<&_NFT_NAME_.Collection{NonFungibleToken.Receiver, NonFungibleToken.Provider, NonFungibleToken.CollectionPublic, _NFT_NAME_._NFT_NAME_CollectionPublic}>(
+        self.account.link<&_NFT_NAME_.Collection{NonFungibleToken.Receiver, NonFungibleToken.CollectionPublic, _NFT_NAME_._NFT_NAME_CollectionPublic}>(
             self.CollectionPublicPath,
             target: self.CollectionStoragePath
         )

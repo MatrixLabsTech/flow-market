@@ -1,5 +1,5 @@
-import NonFungibleToken from 0xNON_FUNGIBLE_TOKEN_ADDRESS
-import _NFT_NAME_ from _NFT_ADDRESS_
+import NonFungibleToken from 0x1d7e57aa55817448
+import Hexi_Coll_1108 from 0x8c8989db8aa4fbf4
 
 pub struct NFTData {
     pub let contract: NFTContractData
@@ -75,21 +75,21 @@ pub struct NFTMedia {
 
 pub fun main(address: Address, id: UInt64): NFTData? {
     let contract = NFTContractData(
-            name: "_NFT_NAME_",
-            address: _NFT_ADDRESS_,
-            storage_path: "_NFT_NAME_.CollectionStoragePath",
-            public_path: "_NFT_NAME_.CollectionPublicPath",
-            public_collection_name: "NonFungibleToken.CollectionPublic, NonFungibleToken.Receiver, _NFT_NAME_._NFT_NAME_CollectionPublic", // interfaces required for initialization
+            name: "Hexi_Coll_1108",
+            address: 0x7f3812b53dd4de20,
+            storage_path: "Hexi_Coll_1108.CollectionStoragePath",
+            public_path: "Hexi_Coll_1108.CollectionPublicPath",
+            public_collection_name: "NonFungibleToken.CollectionPublic, NonFungibleToken.Receiver, Hexi_Coll_1108.Hexi_Coll_1108CollectionPublic", // interfaces required for initialization
             external_domain: "https://matrixworld.org",
         )
         let owner = getAccount(address)
         let col= owner
-            .getCapability(_NFT_NAME_.CollectionPublicPath)
-            .borrow<&{_NFT_NAME_._NFT_NAME_CollectionPublic, NonFungibleToken.CollectionPublic}>()
+            .getCapability(Hexi_Coll_1108.CollectionPublicPath)
+            .borrow<&{Hexi_Coll_1108.Hexi_Coll_1108CollectionPublic, NonFungibleToken.CollectionPublic}>()
             ?? panic("NFT Collection not found")
         if col == nil { return nil }
 
-        let nft = col!.borrow_NFT_NAME_(id: id)
+        let nft = col!.borrowHexi_Coll_1108(id: id)
         if nft == nil { return nil }
 
         let metadata = nft!.getRawMetadata()

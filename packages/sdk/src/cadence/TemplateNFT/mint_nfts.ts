@@ -3,7 +3,7 @@ export const templateNFTMintNFTs: string = `
 import NonFungibleToken from 0xNON_FUNGIBLE_TOKEN_ADDRESS
 import _NFT_NAME_ from _NFT_ADDRESS_
 
-transaction(recipientBatch: [Address], subCollectionIdBatch: [String], metadataBatch: [{String:String}]) {
+transaction(recipientBatch: [Address], metadataBatch: [{String:String}]) {
 
   let minter: &_NFT_NAME_.NFTMinter
 
@@ -15,17 +15,18 @@ transaction(recipientBatch: [Address], subCollectionIdBatch: [String], metadataB
   execute {
     var size = recipientBatch.length
     // check all args length
-    if (size != subCollectionIdBatch.length || size != metadataBatch.length) {
+    if (size != metadataBatch.length) {
       panic ("recipientBatch, subCollectionIdBatch, metadataBatch length not equal")
     }
 
-    while size > 0 {
-      let recipientAccount = getAccount(recipientBatch[size - 1])
-      let subCollectionId = subCollectionIdBatch[size - 1]
-      let metadata = metadataBatch[size - 1]
-      let recipient = recipientAccount.getCapability(_NFT_NAME_.CollectionPublicPath).borrow<&{NonFungibleToken.CollectionPublic}>() ?? panic("recipient collection not found")
-      self.minter.mintNFT(recipient: recipient, subCollectionId: subCollectionId, metadata: metadata)
-      size = size - 1
+    var i = 0
+    while i < size {
+      let recipientAccount = getAccount(recipientBatch[i])
+      let metadata = metadataBatch[i]
+      let recipient = recipientAccount.getCapability(_COLLECTION_PUBLIC_PATH_).borrow<&{NonFungibleToken.CollectionPublic}>() ?? panic("recipient collection not found")
+      self.minter.mintNFT(recipient: recipient, metadata: metadata)
+      
+      i = i + 1
     }
   }
 }`;

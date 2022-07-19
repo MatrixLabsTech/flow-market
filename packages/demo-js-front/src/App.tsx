@@ -4,11 +4,11 @@ import {
   fcl,
   FlowEnv,
   MatrixMarketClient,
-  MatrixMarketOpenOfferClient,
-} from "@matrix-labs/matrix-marketplace-nft-sdk";
+  MatrixMarketOpenOfferClient, MatrixMarketTemplateNFTClient,
+} from '@matrix-labs/matrix-marketplace-nft-sdk';
 const openOfferClient = new MatrixMarketOpenOfferClient();
 const nftClient = new MatrixMarketClient();
-
+const templateNFTClient = new MatrixMarketTemplateNFTClient();
 const network = process.env.REACT_APP_NETWORK;
 function App() {
   const check = useCallback(async () => {
@@ -90,17 +90,30 @@ function App() {
   };
 
   const removeOpenOffer = async () => {
-    let ret;
-    const user = await fcl.currentUser().snapshot();
-    console.log(user);
-    ret = await openOfferClient.removeOffer(90575769).catch(console.error);
-    console.log(ret);
+    try {
+      let ret;
+      const user = await fcl.currentUser().snapshot();
+      console.log(user);
+      ret = await openOfferClient.removeOffer(90575769);
+      console.log(ret);
+    } catch (e) {
+      console.log(`1:`, 1);
+      //@ts-ignore
+      window.ee = e;
+      throw e;
+    }
   };
 
   const acceptOffer = async () => {
     // let ret;
-    const user = await fcl.currentUser().snapshot();
-    console.log(user);
+    try {
+      const user = await fcl.currentUser().snapshot();
+      console.log(user);
+    } catch (e) {
+      //@ts-ignore
+      window.ee = e;
+      throw e;
+    }
     // ret = await openOfferClient
     //   .acceptOffer(90576137, "0xae8b87df71d454cb")
     //   .catch(console.error);
@@ -123,6 +136,25 @@ function App() {
     console.log(user);
     ret = await openOfferClient.getOfferIds(user.addr);
     console.log(ret);
+  };
+  
+  const deployFlowNia = async () => {
+    try {
+      let ret;
+      ret = await templateNFTClient.deploy('FlowNia');
+      console.log(ret);
+    } catch (e) {
+      console.error(`e:`, e);
+    }
+  };
+  const deployFlowNiaMysteryBox = async () => {
+    try {
+      let ret;
+      ret = await templateNFTClient.deploy('FlowNiaMysteryBox');
+      console.log(ret);
+    } catch (e) {
+      console.error(`e:`, e);
+    }
   };
 
   return (

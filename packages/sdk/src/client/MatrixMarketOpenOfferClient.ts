@@ -1,8 +1,6 @@
 import {checkOpenOffer} from '../cadence/openoffer/check_openoffer';
 import {BaseClient} from './BaseClient';
-import {FlowService} from './flow';
-import {MatrixMarket} from "./model";
-import {FlowEnv} from "./env";
+
 
 import {acceptOffer} from "../cadence/openoffer/accept_offer";
 import {initOpenOffer} from "../cadence/openoffer/init_openoffer";
@@ -10,10 +8,10 @@ import {openOffer} from "../cadence/openoffer/open_offer";
 import {getOfferDetails} from "../cadence/openoffer/read_offer_details";
 import {getOfferIds} from "../cadence/openoffer/read_openoffer_ids";
 import {removeOpenOffer} from "../cadence/openoffer/remove_offer";
-import {IBindConfigs, OpenOfferClient} from "./interfaces/OpenOfferClient";
+
 import * as t from "@onflow/types";
 
-export class MatrixMarketOpenOfferClient extends BaseClient implements OpenOfferClient {
+export class MatrixMarketOpenOfferClient extends BaseClient {
     public async checkOpenOffer(address: string): Promise<boolean> {
         try {
             const response = await this.send([

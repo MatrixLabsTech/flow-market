@@ -1,3 +1,7 @@
+import * as fcl from "@onflow/fcl";
+
+// language=Cadence
+export const templateNFTGetNFTScript: string = `
 import NonFungibleToken from 0xNON_FUNGIBLE_TOKEN_ADDRESS
 import _NFT_NAME_ from _NFT_ADDRESS_
 
@@ -84,7 +88,7 @@ pub fun main(address: Address, id: UInt64): NFTData? {
         )
         let owner = getAccount(address)
         let col= owner
-            .getCapability(_NFT_NAME_.CollectionPublicPath)
+            .getCapability(_COLLECTION_PUBLIC_PATH_)
             .borrow<&{_NFT_NAME_._NFT_NAME_CollectionPublic, NonFungibleToken.CollectionPublic}>()
             ?? panic("NFT Collection not found")
         if col == nil { return nil }
@@ -120,4 +124,4 @@ pub fun main(address: Address, id: UInt64): NFTData? {
             media: media,
             metadata: rawMetadata
         )
-}
+}`;

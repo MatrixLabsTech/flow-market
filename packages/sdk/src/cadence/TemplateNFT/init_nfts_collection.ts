@@ -15,10 +15,10 @@ transaction {
     prepare(acct: AuthAccount) {
         acct.link<&FungibleToken.Vault{FungibleToken.Receiver, FungibleToken.Balance}>
              (/public/flowTokenReceiver, target: /storage/flowTokenVault)
-        if acct.borrow<&_NFT_NAME_.Collection>(from: _NFT_NAME_.CollectionStoragePath) == nil {
+        if acct.borrow<&_NFT_NAME_.Collection>(from: _COLLECTION_STORAGE_PATH_) == nil {
             let collection <- _NFT_NAME_.createEmptyCollection() as! @_NFT_NAME_.Collection
-            acct.save(<-collection, to: _NFT_NAME_.CollectionStoragePath)
-            acct.link<&{_NFT_NAME_._NFT_NAME_CollectionPublic, NonFungibleToken.Receiver, NonFungibleToken.CollectionPublic, MetadataViews.ResolverCollection}>(_NFT_NAME_.CollectionPublicPath, target: _NFT_NAME_.CollectionStoragePath)
+            acct.save(<-collection, to: _COLLECTION_STORAGE_PATH_)
+            acct.link<&{_NFT_NAME_._NFT_NAME_CollectionPublic, NonFungibleToken.Receiver, NonFungibleToken.CollectionPublic, MetadataViews.ResolverCollection}>(_COLLECTION_PUBLIC_PATH_, target: _COLLECTION_STORAGE_PATH_)
         }
     }
 }`;

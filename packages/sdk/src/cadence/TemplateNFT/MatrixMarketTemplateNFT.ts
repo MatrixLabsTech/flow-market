@@ -25,18 +25,15 @@ pub contract _NFT_NAME_ : NonFungibleToken {
     pub resource NFT: NonFungibleToken.INFT, MetadataViews.Resolver, RawMetadata {
         pub let id: UInt64
         pub let creator: Address
-        pub let subCollectionId: String
         access(self) let metadata: {String:String}
 
         init(
             id: UInt64,
             creator: Address,
-            subCollectionId: String,
             metadata: {String: String}
         ) {
             self.id = id
             self.creator = creator
-            self.subCollectionId = subCollectionId
             self.metadata = metadata
         }
 
@@ -160,7 +157,6 @@ pub contract _NFT_NAME_ : NonFungibleToken {
         // and deposit it in the recipients collection using their collection reference
         pub fun mintNFT(
             recipient: &{NonFungibleToken.CollectionPublic},
-            subCollectionId: String,
             metadata: {String: String}
         ): &NonFungibleToken.NFT {
 
@@ -169,10 +165,8 @@ pub contract _NFT_NAME_ : NonFungibleToken {
             var newNFT <- create NFT(
                 id: _NFT_NAME_.totalSupply,
                 creator: creator,
-                subCollectionId: subCollectionId,
                 metadata: metadata
             )
-
 
             let tokenRef = &newNFT as &NonFungibleToken.NFT
             // deposit it in the recipient's account using their reference
@@ -201,7 +195,7 @@ pub contract _NFT_NAME_ : NonFungibleToken {
         self.account.save(<-collection, to: self.CollectionStoragePath)
 
         // create a public capability for the collection
-        self.account.link<&_NFT_NAME_.Collection{NonFungibleToken.Receiver, NonFungibleToken.Provider, NonFungibleToken.CollectionPublic, _NFT_NAME_._NFT_NAME_CollectionPublic}>(
+        self.account.link<&_NFT_NAME_.Collection{NonFungibleToken.Receiver, NonFungibleToken.CollectionPublic, _NFT_NAME_._NFT_NAME_CollectionPublic, MetadataViews.ResolverCollection}>(
             self.CollectionPublicPath,
             target: self.CollectionStoragePath
         )

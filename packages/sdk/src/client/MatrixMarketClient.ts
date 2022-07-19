@@ -8,11 +8,9 @@ import {initNFTCollection} from '../cadence/init_nfts_collection';
 import {initCommon} from '../cadence/initCommon';
 import {mintNFTs} from '../cadence/mint_nfts';
 import {BaseClient} from './BaseClient';
-import {FlowEnv} from './env';
-import {FlowService} from './flow';
-import {IBindConfigs, NFTClient} from './interfaces/NFTClient';
 
-export class MatrixMarketClient extends BaseClient implements NFTClient {
+
+export class MatrixMarketClient extends BaseClient {
     
     public async mintNFTs(nftAdminAddress: string, recipientBatch: string[], subCollectionIdBatch: string[], metadataBatch: Array<Array<{ key: string, value: string }>>): Promise<string> {
         try {
