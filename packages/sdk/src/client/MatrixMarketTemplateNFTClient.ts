@@ -5,12 +5,33 @@ import {templateNFTGetNFTScript} from '../cadence/TemplateNFT/get_nft';
 import {templateNFTGetNFTsScript} from '../cadence/TemplateNFT/get_nfts';
 import {templateNFTInitNFTCollection} from '../cadence/TemplateNFT/init_nfts_collection';
 import {MatrixMarketTemplateNFT} from '../cadence/TemplateNFT/MatrixMarketTemplateNFT';
+import {MatrixMarketTemplateNFTWithTokenURI} from '../cadence/TemplateNFT/MatrixMarketTemplateNFTWithTokenURI';
 import {templateNFTMintNFTs} from '../cadence/TemplateNFT/mint_nfts';
 import {updateContract} from '../cadence/updateContract';
 import {BaseClient, handleScript, handleTx} from './BaseClient';
 
 export class MatrixMarketTemplateNFTClient extends BaseClient {
-
+    
+    async codeDeployWithTokenURI(NFTName: string, baseURI = ''): Promise<string> {
+        return MatrixMarketTemplateNFTWithTokenURI.replace(/_BASE_URI_/g, baseURI).replace(/_NFT_NAME_/g, NFTName).replace(/0xNON_FUNGIBLE_TOKEN_ADDRESS/g, await this.fcl.config().get('0xNON_FUNGIBLE_TOKEN_ADDRESS')).replace(/0xMETADATA_VIEWS_ADDRESS/g, await this.fcl.config().get('0xMETADATA_VIEWS_ADDRESS'))
+    }
+    
+    @handleTx
+    async deployWithTokenURI(NFTName: string, baseURI = '', {update = false} = {}): Promise<string> {
+        let code = update ? updateContract : deployContract;
+        return await this.send([
+            this.fcl.transaction(code),
+            this.fcl.args([
+                this.fcl.arg(NFTName, t.String),
+                this.fcl.arg(Buffer.from(MatrixMarketTemplateNFTWithTokenURI.replace(/_BASE_URI_/g, baseURI).replace(/_NFT_NAME_/g, NFTName).replace(/0xNON_FUNGIBLE_TOKEN_ADDRESS/g, await this.fcl.config().get('0xNON_FUNGIBLE_TOKEN_ADDRESS')).replace(/0xMETADATA_VIEWS_ADDRESS/g, await this.fcl.config().get('0xMETADATA_VIEWS_ADDRESS')), 'utf8').toString('hex'), t.String)
+            ]),
+            this.fcl.proposer(this.getAuth()),
+            this.fcl.authorizations([this.getAuth()]),
+            this.fcl.limit(2000),
+            this.fcl.payer(this.getAuth())
+        ]);
+    }
+    
     async codeDeploy(NFTName: string): Promise<string> {
         return MatrixMarketTemplateNFT.replace(/_NFT_NAME_/g, NFTName).replace(/0xNON_FUNGIBLE_TOKEN_ADDRESS/g, await this.fcl.config().get('0xNON_FUNGIBLE_TOKEN_ADDRESS')).replace(/0xMETADATA_VIEWS_ADDRESS/g, await this.fcl.config().get('0xMETADATA_VIEWS_ADDRESS'))
     }
