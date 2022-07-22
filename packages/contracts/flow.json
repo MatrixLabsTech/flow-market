@@ -71,6 +71,16 @@
     "testnet-account3": {
       "address": "0xeca46256a90fc4ae",
       "key": "7a437e23da24e7772896c556262fafa58af9fde12890be5f33509c8ce8b94e64"
+    },
+    "main": {
+      "address": "2162bbe13ade251e",
+      "key": {
+        "type": "hex",
+        "index": 0,
+        "signatureAlgorithm": "ECDSA_secp256k1",
+        "hashAlgorithm": "SHA3_256",
+        "privateKey": "$PRIVATE_KEY"
+      }
     }
   },
   "deployments": {
