@@ -54,8 +54,7 @@ export class MatrixMarketTemplatePaymentMinterClient extends BaseClient {
              receiverAddr: string,
              startTime: string|undefined,
              endTime: string|undefined,
-             max: string,
-             current: string): Promise<string> {
+             max: string): Promise<string> {
         return await this.send([
             this.fcl.transaction(setSale.replace(/_PAYMENT_MINTER_NAME_/g, PaymentMinterName).replace(/_PAYMENT_MINTER_ADDRESS_/g, PaymentMinterAddress)),
             this.fcl.args([this.fcl.arg(price, t.UFix64),
@@ -63,8 +62,7 @@ export class MatrixMarketTemplatePaymentMinterClient extends BaseClient {
                 this.fcl.arg(receiverAddr, t.Address),
                 this.fcl.arg(startTime, t.Optional(t.UFix64)),
                 this.fcl.arg(endTime, t.Optional(t.UFix64)),
-                this.fcl.arg(max, t.UInt64),
-                this.fcl.arg(current, t.UInt64)]),
+                this.fcl.arg(max, t.UInt64)]),
             this.fcl.proposer(this.getAuth()),
             this.fcl.authorizations([this.getAuth()]),
             this.fcl.limit(1000),

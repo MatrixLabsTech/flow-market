@@ -11,8 +11,7 @@ transaction(
             receiverAddr: Address,
             startTime: UFix64?,
             endTime: UFix64?,
-            max: UInt64,
-            current: UInt64) {
+            max: UInt64) {
   let admin: &_PAYMENT_MINTER_NAME_.Administrator
   prepare(signer: AuthAccount) {
     self.admin = signer.borrow<&_PAYMENT_MINTER_NAME_.Administrator>(from: _PAYMENT_MINTER_NAME_.AdminStoragePath) ?? panic("Cannot borrow admin")
@@ -34,7 +33,10 @@ transaction(
         
         let receiver = getAccount(receiverAddr).getCapability<&{FungibleToken.Receiver}>(tokenReceiverPath)!
         assert(receiver.check(), message: "Missing or mis-typed FungibleToken receiver")
-        
+        var current = UInt64(0)
+        if(_PAYMENT_MINTER_NAME_.sale !=nil){
+            current = _PAYMENT_MINTER_NAME_.sale!.current
+        }
     self.admin.setSale(sale: _PAYMENT_MINTER_NAME_.Sale(price,
             salePaymentVaultType,
             receiver,

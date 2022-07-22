@@ -7,14 +7,13 @@ import {getNFTsScript} from '../cadence/get_nfts';
 import {initNFTCollection} from '../cadence/init_nfts_collection';
 import {initCommon} from '../cadence/initCommon';
 import {mintNFTs} from '../cadence/mint_nfts';
-import {BaseClient} from './BaseClient';
+import {BaseClient, handleScript, handleTx} from './BaseClient';
 
 
 export class MatrixMarketClient extends BaseClient {
-    
+    @handleTx
     public async mintNFTs(nftAdminAddress: string, recipientBatch: string[], subCollectionIdBatch: string[], metadataBatch: Array<Array<{ key: string, value: string }>>): Promise<string> {
-        try {
-            const response = await this.send([
+        return await this.send([
                 mintNFTs,
                 this.fcl.args([this.fcl.arg(nftAdminAddress, t.Address), this.fcl.arg(recipientBatch, t.Array(t.Address)), this.fcl.arg(subCollectionIdBatch, t.Array(t.String)), this.fcl.arg(metadataBatch, t.Array(t.Dictionary({key: t.String, value: t.String})))]),
                 this.fcl.proposer(this.getAuth()),
@@ -22,121 +21,68 @@ export class MatrixMarketClient extends BaseClient {
                 this.fcl.limit(1000),
                 this.fcl.payer(this.getAuth())
             ]);
-            const ret = await this.fcl.tx(response).onceSealed();
-            if (ret.errorMessage !== "" && ret.status != 4) {
-                return Promise.reject(ret.errorMessage);
-            }
-            return response.transactionId;
-        } catch (error) {
-            console.error(error);
-            return Promise.reject(error);
-        }
     }
     
+    @handleScript
     public async FLOWBalance(address: string): Promise<number> {
-        try {
-            const response = await this.send([
+        return await this.send([
                 getFLOWBalanceScript,
                 this.fcl.args([this.fcl.arg(address, t.Address)]),
                 this.fcl.limit(1000)
             ]);
-            return this.fcl.decode(response);
-        } catch (error) {
-            console.error(error);
-            return Promise.reject("Something is wrong with fetching FLOW balance");
-        }
     }
-
+    
+    @handleScript
     public async FUSDBalance(address: string): Promise<number> {
-        try {
-            const response = await this.send([
+        return await this.send([
                 getFUSDBalanceScript,
                 this.fcl.args([this.fcl.arg(address, t.Address)]),
                 this.fcl.limit(1000)
             ]);
-            return this.fcl.decode(response);
-        } catch (error) {
-            console.error(error);
-            return Promise.reject("Something is wrong with fetching FUSD balance");
-        }
     }
-
+    
+    @handleScript
     public async checkNFTsCollection(address: string): Promise<boolean> {
-        try {
-            const response = await this.send([
+        return await this.send([
                 checkNFTsCollection,
                 this.fcl.args([this.fcl.arg(address, t.Address)]),
                 this.fcl.limit(1000)
             ]);
-            return this.fcl.decode(response);
-        } catch (error) {
-            console.error(error);
-            return Promise.reject(error);
-        }
     }
     
+    @handleScript
     public async getNFTs(account: string): Promise<number[]> {
-        try {
-            const response = await this.send([getNFTsScript, this.fcl.args([this.fcl.arg(account, t.Address)]), this.fcl.limit(2000)]);
-            
-            return this.fcl.decode(response);
-        } catch (error) {
-            console.error(error);
-            return Promise.reject(error);
-        }
+        return await this.send([getNFTsScript, this.fcl.args([this.fcl.arg(account, t.Address)]), this.fcl.limit(2000)]);
     }
-
+    
+    @handleTx
     public async initNFTCollection(): Promise<string> {
-        try {
-            const response = await this.send([
+        return await this.send([
                 initNFTCollection,
                 this.fcl.proposer(this.getAuth()),
                 this.fcl.authorizations([this.getAuth()]),
                 this.fcl.limit(1000),
                 this.fcl.payer(this.getAuth())
             ]);
-            const ret = await this.fcl.tx(response).onceSealed();
-            if (ret.errorMessage !== "" && ret.status != 4) {
-                return Promise.reject(ret.errorMessage);
-            }
-            return response.transactionId;
-        } catch (error) {
-            console.error(error);
-            return Promise.reject(error);
-        }
     }
     
+    @handleScript
     async checkCommon(address: string): Promise<boolean> {
-        try {
-            const response = await this.send([
+        return this.send([
                 this.fcl.script(checkCommon),
                 this.fcl.args([this.fcl.arg(address, t.Address)]),
                 this.fcl.limit(1000)
             ]);
-            return this.fcl.decode(response);
-        } catch (error) {
-            console.error(error);
-            return Promise.reject(error);
-        }
     }
     
+    @handleTx
     async initCommon(): Promise<string> {
-        try {
-            const response = await this.send([
+        return await this.send([
                 this.fcl.transaction(initCommon),
                 this.fcl.proposer(this.getAuth()),
                 this.fcl.authorizations([this.getAuth()]),
                 this.fcl.limit(1000),
                 this.fcl.payer(this.getAuth())
             ]);
-            const ret = await this.fcl.tx(response).onceSealed();
-            if (ret.errorMessage !== '' && ret.status != 4) {
-                return Promise.reject(ret.errorMessage);
-            }
-            return response.transactionId;
-        } catch (error) {
-            console.error(error);
-            return Promise.reject(error);
-        }
     }
 }
