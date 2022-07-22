@@ -110,10 +110,11 @@ pub contract MatrixMarketOpenOffer {
 
             for cut in cuts {
                 assert(cut.receiver.check(), message: "invalid cut receiver")
+                assert(price > cut.amount, message: "price must be > 0")
+
                 price = price - cut.amount
                 cutsInfo[cut.receiver.address] = cut.amount
             }
-            assert(price > 0.0, message: "price must be > 0")
 
             let vaultRef = self.vaultRefCapability.borrow() ?? panic("cannot borrow vaultRefCapability")
             self.details = OfferDetails(
