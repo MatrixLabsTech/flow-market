@@ -1,5 +1,3 @@
-import t from '@onflow/types';
-import {TemplatePaymentMinter} from '../cadence/TemplatePaymentMinter/TemplatePaymentMinter';
 import {FlowEnv} from './env';
 import {FlowService} from './flow';
 

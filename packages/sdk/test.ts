@@ -5,26 +5,22 @@ import {MatrixMarketTemplatePaymentMinterClient} from './src/client/MatrixMarket
 async function main(){
   {
     let c = new MatrixMarketTemplateNFTClient();
-    await c.bindFcl(fcl, FlowEnv.flowMainnet);
-    c.bindAuth('0xafb8473247d9354c', process.env.PrivateKey);
-    
+    await c.bindFcl(fcl, FlowEnv.flowTestnet);
+    c.bindAuth('0x7f3812b53dd4de20', '7a437e23da24e7772896c556262fafa58af9fde12890be5f33509c8ce8b94e64');
+  
     let ret;
     try {
-      ret = await c.sendTx(`
-      import FlowNia from 0xafb8473247d9354c
-transaction {
-  prepare(signer: AuthAccount) {
-    let admin = signer.borrow<&FlowNia.Admin>(from: FlowNia.AdminStoragePath) ?? panic("Cannot borrow admin")
-    admin.setBaseURI(baseURI: "https://chainbase-api.matrixlabs.org/metadata/api/v1/apps/ethereum:mainnet:1IEzdAr_iDJvek3-CE1-p/contracts/0x60E4d786628Fea6478F785A6d7e704777c86a7c6_ethereum/metadata/tokens")
-  }
+      ret = await c.sendScript(`import MatrixWorldVoucher from 0x7f3812b53dd4de20
+pub fun main(): UInt64 {
+    return MatrixWorldVoucher.totalSupply
 }
-      ` )
+`);
+
       console.log(`ret:`, ret);
       // ret=await c.checkNFTsCollection('FlowNiaMysteryBox', '0x7f3812b53dd4de20', '0x7f3812b53dd4de20')
       // console.log(`ret:`, ret);
       // ret=await c.initNFTCollection('FlowNiaMysteryBox', '0x7f3812b53dd4de20')
-      ret = await c.getNFTs('FlowNia', '0xafb8473247d9354c', '0xafb8473247d9354c');
-      console.log(`ret:`, ret);
+     
     } catch (e: any) {
       console.log(`e.message:`, e.message);
     }
