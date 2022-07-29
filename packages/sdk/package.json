@@ -1,6 +1,6 @@
 {
   "name": "@matrix-labs/matrix-marketplace-nft-sdk",
-  "version": "0.0.49",
+  "version": "0.0.50",
   "main": "./dist/index.js",
   "files": [
     "dist"
@@ -46,8 +46,7 @@
   },
   "lint-staged": {
     "*.{js,ts}": [
-      "eslint",
-      "prettier --check"
+      "eslint", "prettier --check"
     ]
   }
 }

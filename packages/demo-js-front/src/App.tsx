@@ -18,8 +18,12 @@ function App() {
       console.log("checking test....");
       await nftClient.bindFcl(fcl, FlowEnv.flowTestnet);
       await openOfferClient.bindFcl(fcl, FlowEnv.flowTestnet);
-      await fcl.logIn();
-      await fcl.authenticate();
+
+      await fcl.config().put('discovery.authn.endpoint','https://fcl-discovery.onflow.org/api/testnet/authn')
+      await fcl.config().put('discovery.authn.include',['0x33f75ff0b830dcec'])
+      fcl.discovery.authn.subscribe(res => console.log(res.results))
+      console.log(`1:`, 1);
+
     } else if (network === "local") {
       console.log("checking local....");
       await nftClient.bindFcl(fcl, FlowEnv.localEmulator);
@@ -32,6 +36,8 @@ function App() {
   useEffect(() => {
     check();
   }, [check]);
+
+  Object.assign(window,{fcl,nftClient})
 
   const mint = async () => {
     let ret;

@@ -44,6 +44,8 @@ export class BaseClient {
           .config()
           .put('accessNode.api', 'https://rest-testnet.onflow.org') // connect to Flow testnet
           .put('discovery.wallet', 'https://fcl-discovery.onflow.org/testnet/authn') // use Blocto testnet wallet
+          .put('discovery.authn.endpoint', 'https://fcl-discovery.onflow.org/api/testnet/authn')
+          .put('discovery.authn.include', ['0x33f75ff0b830dcec']) // add Lilico as include
           .put('0xFUNGIBLE_TOKEN_ADDRESS', '0x9a0766d93b6608b7')
           .put('0xFUSD_ADDRESS', '0xe223d8a629e49c68')
           .put('0xFLOW_TOKEN_ADDRESS', '0x7e60df042a9c0868')
@@ -59,6 +61,8 @@ export class BaseClient {
           .config()
           .put("accessNode.api", "https://rest-mainnet.onflow.org")
           .put("discovery.wallet", "https://fcl-discovery.onflow.org/authn") // use Blocto wallet
+          .put('discovery.authn.endpoint', 'https://fcl-discovery.onflow.org/api/authn')
+          .put('discovery.authn.include', ['0x33f75ff0b830dcec']) // add Lilico as include
           .put('0xFUNGIBLE_TOKEN_ADDRESS', '0xf233dcee88fe0abe')
           .put('0xFUSD_ADDRESS', '0x3c5959b568896393')
           .put('0xFLOW_TOKEN_ADDRESS', '0x1654653399040a61')
