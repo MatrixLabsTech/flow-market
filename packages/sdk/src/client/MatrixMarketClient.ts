@@ -18,7 +18,7 @@ export class MatrixMarketClient extends BaseClient {
                 this.fcl.args([this.fcl.arg(nftAdminAddress, t.Address), this.fcl.arg(recipientBatch, t.Array(t.Address)), this.fcl.arg(subCollectionIdBatch, t.Array(t.String)), this.fcl.arg(metadataBatch, t.Array(t.Dictionary({key: t.String, value: t.String})))]),
                 this.fcl.proposer(this.getAuth()),
                 this.fcl.authorizations([this.getAuth()]),
-                this.fcl.limit(1000),
+                this.fcl.limit(9999),
                 this.fcl.payer(this.getAuth())
             ]);
     }
@@ -28,7 +28,7 @@ export class MatrixMarketClient extends BaseClient {
         return await this.send([
                 getFLOWBalanceScript,
                 this.fcl.args([this.fcl.arg(address, t.Address)]),
-                this.fcl.limit(1000)
+                this.fcl.limit(9999)
             ]);
     }
     
@@ -37,7 +37,7 @@ export class MatrixMarketClient extends BaseClient {
         return await this.send([
                 getFUSDBalanceScript,
                 this.fcl.args([this.fcl.arg(address, t.Address)]),
-                this.fcl.limit(1000)
+                this.fcl.limit(9999)
             ]);
     }
     
@@ -46,13 +46,13 @@ export class MatrixMarketClient extends BaseClient {
         return await this.send([
                 checkNFTsCollection,
                 this.fcl.args([this.fcl.arg(address, t.Address)]),
-                this.fcl.limit(1000)
+                this.fcl.limit(9999)
             ]);
     }
     
     @handleScript
     public async getNFTs(account: string): Promise<number[]> {
-        return await this.send([getNFTsScript, this.fcl.args([this.fcl.arg(account, t.Address)]), this.fcl.limit(2000)]);
+        return await this.send([getNFTsScript, this.fcl.args([this.fcl.arg(account, t.Address)]), this.fcl.limit(9999)]);
     }
     
     @handleTx
@@ -61,7 +61,7 @@ export class MatrixMarketClient extends BaseClient {
                 initNFTCollection,
                 this.fcl.proposer(this.getAuth()),
                 this.fcl.authorizations([this.getAuth()]),
-                this.fcl.limit(1000),
+                this.fcl.limit(9999),
                 this.fcl.payer(this.getAuth())
             ]);
     }
@@ -71,7 +71,7 @@ export class MatrixMarketClient extends BaseClient {
         return this.send([
                 this.fcl.script(checkCommon),
                 this.fcl.args([this.fcl.arg(address, t.Address)]),
-                this.fcl.limit(1000)
+                this.fcl.limit(9999)
             ]);
     }
     
@@ -81,7 +81,7 @@ export class MatrixMarketClient extends BaseClient {
                 this.fcl.transaction(initCommon),
                 this.fcl.proposer(this.getAuth()),
                 this.fcl.authorizations([this.getAuth()]),
-                this.fcl.limit(1000),
+                this.fcl.limit(9999),
                 this.fcl.payer(this.getAuth())
             ]);
     }

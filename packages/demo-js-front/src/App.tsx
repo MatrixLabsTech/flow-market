@@ -1,4 +1,6 @@
 import React, { useCallback, useEffect } from "react";
+import * as t from '@onflow/types';
+
 import "./App.css";
 import {
   fcl,
@@ -12,9 +14,15 @@ const templateNFTClient = new MatrixMarketTemplateNFTClient();
 const network = process.env.REACT_APP_NETWORK;
 function App() {
   const check = useCallback(async () => {
+    
+    Object.assign(window,{
+      fcl,
+      c: nftClient,
+      t
+    });
     await fcl.currentUser.unauthenticate();
     console.log(`checking.....${network}`);
-    if (network === "test") {
+    if (network === "testnet") {
       console.log("checking test....");
       await nftClient.bindFcl(fcl, FlowEnv.flowTestnet);
       await openOfferClient.bindFcl(fcl, FlowEnv.flowTestnet);
@@ -24,12 +32,12 @@ function App() {
       fcl.discovery.authn.subscribe(res => console.log(res.results))
       console.log(`1:`, 1);
 
-    } else if (network === "local") {
+    } else if (network === "mainnet") {
       console.log("checking local....");
-      await nftClient.bindFcl(fcl, FlowEnv.localEmulator);
-      await openOfferClient.bindFcl(fcl, FlowEnv.localEmulator);
+      await nftClient.bindFcl(fcl, FlowEnv.flowMainnet);
+      await openOfferClient.bindFcl(fcl, FlowEnv.flowMainnet);
+      await templateNFTClient.bindFcl(fcl, FlowEnv.flowMainnet)
       await fcl.logIn();
-      await fcl.authenticate();
     }
   }, []);
 

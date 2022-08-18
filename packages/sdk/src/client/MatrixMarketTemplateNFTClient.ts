@@ -27,7 +27,7 @@ export class MatrixMarketTemplateNFTClient extends BaseClient {
             ]),
             this.fcl.proposer(this.getAuth()),
             this.fcl.authorizations([this.getAuth()]),
-            this.fcl.limit(2000),
+            this.fcl.limit(9999),
             this.fcl.payer(this.getAuth())
         ]);
     }
@@ -47,7 +47,7 @@ export class MatrixMarketTemplateNFTClient extends BaseClient {
             ]),
             this.fcl.proposer(this.getAuth()),
             this.fcl.authorizations([this.getAuth()]),
-            this.fcl.limit(2000),
+            this.fcl.limit(9999),
             this.fcl.payer(this.getAuth())
         ]);
     }
@@ -62,7 +62,7 @@ export class MatrixMarketTemplateNFTClient extends BaseClient {
             })))]),
             this.fcl.proposer(this.getAuth()),
             this.fcl.authorizations([this.getAuth()]),
-            this.fcl.limit(1000),
+            this.fcl.limit(9999),
             this.fcl.payer(this.getAuth())
         ]);
     }
@@ -72,18 +72,18 @@ export class MatrixMarketTemplateNFTClient extends BaseClient {
         return await this.send([
             this.fcl.script(templateNFTCheckNFTsCollection.replace(/_NFT_NAME_/g, NFTName).replace(/_NFT_ADDRESS_/g, NFTAddress).replace(/_COLLECTION_PUBLIC_PATH_/g, collectionPublicPath)),
             this.fcl.args([this.fcl.arg(address, t.Address)]),
-            this.fcl.limit(1000)
+            this.fcl.limit(9999)
         ]);
     }
     
     @handleScript
     async getNFTs(NFTName: string, NFTAddress: string, account: string, {collectionPublicPath = NFTName + '.CollectionPublicPath'} = {}): Promise<number[]> {
-        return await this.send([this.fcl.script(templateNFTGetNFTsScript.replace(/_NFT_NAME_/g, NFTName).replace(/_NFT_ADDRESS_/g, NFTAddress).replace(/_COLLECTION_PUBLIC_PATH_/g, collectionPublicPath)), this.fcl.args([this.fcl.arg(account, t.Address)]), this.fcl.limit(2000)]);
+        return await this.send([this.fcl.script(templateNFTGetNFTsScript.replace(/_NFT_NAME_/g, NFTName).replace(/_NFT_ADDRESS_/g, NFTAddress).replace(/_COLLECTION_PUBLIC_PATH_/g, collectionPublicPath)), this.fcl.args([this.fcl.arg(account, t.Address)]), this.fcl.limit(9999)]);
     }
     
     @handleScript
     async getNFT(NFTName: string, NFTAddress: string, account: string, id: number, {collectionPublicPath = NFTName + '.CollectionPublicPath'} = {}): Promise<any> {
-        return await this.send([this.fcl.script(templateNFTGetNFTScript.replace(/_NFT_NAME_/g, NFTName).replace(/_NFT_ADDRESS_/g, NFTAddress).replace(/_COLLECTION_PUBLIC_PATH_/g, collectionPublicPath)), this.fcl.args([this.fcl.arg(account, t.Address), this.fcl.arg(id, t.UInt64)]), this.fcl.limit(2000)]);
+        return await this.send([this.fcl.script(templateNFTGetNFTScript.replace(/_NFT_NAME_/g, NFTName).replace(/_NFT_ADDRESS_/g, NFTAddress).replace(/_COLLECTION_PUBLIC_PATH_/g, collectionPublicPath)), this.fcl.args([this.fcl.arg(account, t.Address), this.fcl.arg(id, t.UInt64)]), this.fcl.limit(9999)]);
     }
     
     @handleTx
@@ -95,7 +95,7 @@ export class MatrixMarketTemplateNFTClient extends BaseClient {
             this.fcl.transaction(templateNFTInitNFTCollection.replace(/_NFT_NAME_/g, NFTName).replace(/_NFT_ADDRESS_/g, NFTAddress).replace(/_COLLECTION_PUBLIC_PATH_/g, collectionPublicPath).replace(/_COLLECTION_STORAGE_PATH_/g, collectionStoragePath)),
             this.fcl.proposer(this.getAuth()),
             this.fcl.authorizations([this.getAuth()]),
-            this.fcl.limit(1000),
+            this.fcl.limit(9999),
             this.fcl.payer(this.getAuth())
         ]);
     }

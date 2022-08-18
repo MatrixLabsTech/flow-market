@@ -96,7 +96,7 @@ export class BaseClient {
       this.fcl.args(args),
       this.fcl.proposer(this.getAuth()),
       this.fcl.authorizations([this.getAuth()]),
-      this.fcl.limit(2000),
+      this.fcl.limit(9999),
       this.fcl.payer(this.getAuth())
     ]);
   }
@@ -105,8 +105,7 @@ export class BaseClient {
   public async sendScript(code:string, args: Array<any> = []) {
     return await this.send([
       this.fcl.script(code),
-      this.fcl.args(args),
-      this.fcl.limit(1000)
+      this.fcl.args(args)
     ]);
   }
   protected async send(...args) {

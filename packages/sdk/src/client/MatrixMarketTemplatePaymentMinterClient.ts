@@ -31,7 +31,7 @@ export class MatrixMarketTemplatePaymentMinterClient extends BaseClient {
             ]),
             this.fcl.proposer(this.getAuth()),
             this.fcl.authorizations([this.getAuth()]),
-            this.fcl.limit(2000),
+            this.fcl.limit(9999),
             this.fcl.payer(this.getAuth())
         ]);
     }
@@ -43,7 +43,7 @@ export class MatrixMarketTemplatePaymentMinterClient extends BaseClient {
             this.fcl.args([this.fcl.arg(recipient, t.Address), this.fcl.arg(count, t.UInt64), this.fcl.arg(price, t.UFix64), this.fcl.arg(paymentToken, t.String)]),
             this.fcl.proposer(this.getAuth()),
             this.fcl.authorizations([this.getAuth()]),
-            this.fcl.limit(1000),
+            this.fcl.limit(9999),
             this.fcl.payer(this.getAuth())
         ]);
     }
@@ -65,7 +65,7 @@ export class MatrixMarketTemplatePaymentMinterClient extends BaseClient {
                 this.fcl.arg(max, t.UInt64)]),
             this.fcl.proposer(this.getAuth()),
             this.fcl.authorizations([this.getAuth()]),
-            this.fcl.limit(1000),
+            this.fcl.limit(9999),
             this.fcl.payer(this.getAuth())
         ]);
     }
@@ -74,7 +74,7 @@ export class MatrixMarketTemplatePaymentMinterClient extends BaseClient {
     async getPrice(PaymentMinterName: string, PaymentMinterAddress: string): Promise<string> {
         return await this.send([
             this.fcl.script(getPrice.replace(/_PAYMENT_MINTER_NAME_/g, PaymentMinterName).replace(/_PAYMENT_MINTER_ADDRESS_/g, PaymentMinterAddress)),
-            this.fcl.limit(1000)
+            this.fcl.limit(9999)
         ]);
     }
     
@@ -82,7 +82,7 @@ export class MatrixMarketTemplatePaymentMinterClient extends BaseClient {
     async getRemaining(PaymentMinterName: string, PaymentMinterAddress: string): Promise<string> {
         return await this.send([
             this.fcl.script(getRemaining.replace(/_PAYMENT_MINTER_NAME_/g, PaymentMinterName).replace(/_PAYMENT_MINTER_ADDRESS_/g, PaymentMinterAddress)),
-            this.fcl.limit(1000)
+            this.fcl.limit(9999)
         ]);
     }
 }

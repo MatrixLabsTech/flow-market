@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@matrix-labs/matrix-marketplace-nft-sdk": "*",
+    "@onflow/types": "^1.0.3",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
@@ -10,7 +12,6 @@
     "@types/node": "^12.0.0",
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
-    "@matrix-labs/matrix-marketplace-nft-sdk": "*",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-scripts": "4.0.3",
@@ -18,7 +19,7 @@
     "web-vitals": "^1.0.1"
   },
   "scripts": {
-    "start": "cp ./env/env.test .env && react-scripts start",
+    "start": "react-scripts start",
     "start:test": "cp ./env/env.test .env && react-scripts start",
     "start:local": "cp ./env/env.local .env && react-scripts start",
     "build": "react-scripts build",
@@ -32,6 +33,8 @@
     ]
   },
   "browserslist": [
-    ">0.2%", "not dead", "not op_mini all"
+    ">0.2%",
+    "not dead",
+    "not op_mini all"
   ]
 }

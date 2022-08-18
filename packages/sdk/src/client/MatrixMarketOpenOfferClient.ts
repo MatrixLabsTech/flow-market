@@ -17,18 +17,18 @@ export class MatrixMarketOpenOfferClient extends BaseClient {
         return await this.send([
                 checkOpenOffer,
                 this.fcl.args([this.fcl.arg(address, t.Address)]),
-                this.fcl.limit(2000)
+                this.fcl.limit(9999)
             ]);
     }
     
     @handleTx
-    public async acceptOffer(supportedNFTName: string, supportedNFTAddress: string, offerResourceId: number, openOfferAddress: string): Promise<string> {
+    public async acceptOffer(listed: string[], supportedNFTName: string, supportedNFTAddress: string, offerResourceId: number, openOfferAddress: string): Promise<string> {
         return await this.send([
                 this.fcl.transaction(acceptOffer.replace(/0xsupportedNFTName/g, supportedNFTName).replace(/0xsupportedNFTAddress/g, supportedNFTAddress)),
-                this.fcl.args([this.fcl.arg(offerResourceId, t.UInt64), this.fcl.arg(openOfferAddress, t.Address)]),
+                this.fcl.args([this.fcl.arg(listed, t.Array(t.UInt64)), this.fcl.arg(offerResourceId, t.UInt64), this.fcl.arg(openOfferAddress, t.Address)]),
                 this.fcl.proposer(this.getAuth()),
                 this.fcl.authorizations([this.getAuth()]),
-                this.fcl.limit(2000),
+                this.fcl.limit(9999),
                 this.fcl.payer(this.getAuth())
             ]);
     }
@@ -39,7 +39,7 @@ export class MatrixMarketOpenOfferClient extends BaseClient {
                 initOpenOffer,
                 this.fcl.proposer(this.getAuth()),
                 this.fcl.authorizations([this.getAuth()]),
-                this.fcl.limit(2000),
+                this.fcl.limit(9999),
                 this.fcl.payer(this.getAuth())
             ]);
     }
@@ -58,7 +58,7 @@ export class MatrixMarketOpenOfferClient extends BaseClient {
                 ]),
                 this.fcl.proposer(this.getAuth()),
                 this.fcl.authorizations([this.getAuth()]),
-                this.fcl.limit(2000),
+                this.fcl.limit(9999),
                 this.fcl.payer(this.getAuth())
             ]);
     }
@@ -70,18 +70,18 @@ export class MatrixMarketOpenOfferClient extends BaseClient {
                 this.fcl.args([this.fcl.arg(offerResourceId, t.UInt64)]),
                 this.fcl.proposer(this.getAuth()),
                 this.fcl.authorizations([this.getAuth()]),
-                this.fcl.limit(2000),
+                this.fcl.limit(9999),
                 this.fcl.payer(this.getAuth())
             ]);
     }
     
     @handleScript
     public async getOfferIds(account: string): Promise<number[]> {
-        return await this.send([getOfferIds, this.fcl.args([this.fcl.arg(account, t.Address)]), this.fcl.limit(2000)]);
+        return await this.send([getOfferIds, this.fcl.args([this.fcl.arg(account, t.Address)]), this.fcl.limit(9999)]);
     }
     
     @handleScript
     public async getOfferDetails(account: string, offerResourceId: number): Promise<string> {
-        return await this.send([getOfferDetails, this.fcl.args([this.fcl.arg(account, t.Address), this.fcl.arg(offerResourceId, t.UInt64)]), this.fcl.limit(2000)]);
+        return await this.send([getOfferDetails, this.fcl.args([this.fcl.arg(account, t.Address), this.fcl.arg(offerResourceId, t.UInt64)]), this.fcl.limit(9999)]);
     }
 }

@@ -1,6 +1,7 @@
 export * from "./client/MatrixMarketClient"
 export * as fcl from "@onflow/fcl"
 export * from "./client/env"
+export * from "./client/BaseClient"
 export * from "./client/MatrixMarketOpenOfferClient"
 export * from "./client/MatrixMarketTemplateNFTClient"
 export * from "./client/MatrixMarketTemplatePaymentMinterClient"

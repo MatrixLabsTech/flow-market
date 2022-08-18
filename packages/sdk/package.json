@@ -1,6 +1,6 @@
 {
   "name": "@matrix-labs/matrix-marketplace-nft-sdk",
-  "version": "0.0.50",
+  "version": "0.0.54",
   "main": "./dist/index.js",
   "files": [
     "dist"
@@ -26,6 +26,7 @@
     "eslint": "^7.27.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-import": "^2.23.3",
+    "global-agent": "^3.0.0",
     "lint": "^0.7.0",
     "lint-staged": "^11.1.2",
     "mocha": "^9.1.2",
@@ -38,7 +39,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@onflow/fcl": "^1.1.0",
+    "@onflow/fcl": "1.1.0",
     "@onflow/types": "^1.0.2",
     "@types/elliptic": "^6.4.14",
     "elliptic": "^6.5.4",
@@ -46,7 +47,8 @@
   },
   "lint-staged": {
     "*.{js,ts}": [
-      "eslint", "prettier --check"
+      "eslint",
+      "prettier --check"
     ]
   }
 }
