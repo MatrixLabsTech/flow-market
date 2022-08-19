@@ -1,5 +1,5 @@
 import * as t from '@onflow/types';
-import { transferNFT } from 'src/cadence/TemplateNFT/transferNFT';
+import { transferNFT } from '../cadence/TemplateNFT/transferNFT';
 import {deployContract} from '../cadence/deployContract';
 import {templateNFTCheckNFTsCollection} from '../cadence/TemplateNFT/check_nfts_collection';
 import {templateNFTGetNFTScript} from '../cadence/TemplateNFT/get_nft';
