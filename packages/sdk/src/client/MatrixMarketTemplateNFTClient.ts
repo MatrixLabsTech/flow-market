@@ -1,4 +1,5 @@
 import * as t from '@onflow/types';
+import { transferNFT } from 'src/cadence/TemplateNFT/transferNFT';
 import {deployContract} from '../cadence/deployContract';
 import {templateNFTCheckNFTsCollection} from '../cadence/TemplateNFT/check_nfts_collection';
 import {templateNFTGetNFTScript} from '../cadence/TemplateNFT/get_nft';
@@ -45,6 +46,19 @@ export class MatrixMarketTemplateNFTClient extends BaseClient {
                 this.fcl.arg(NFTName, t.String),
                 this.fcl.arg(Buffer.from(MatrixMarketTemplateNFT.replace(/_NFT_NAME_/g, NFTName).replace(/0xNON_FUNGIBLE_TOKEN_ADDRESS/g, await this.fcl.config().get('0xNON_FUNGIBLE_TOKEN_ADDRESS')).replace(/0xMETADATA_VIEWS_ADDRESS/g, await this.fcl.config().get('0xMETADATA_VIEWS_ADDRESS')), 'utf8').toString('hex'), t.String)
             ]),
+            this.fcl.proposer(this.getAuth()),
+            this.fcl.authorizations([this.getAuth()]),
+            this.fcl.limit(9999),
+            this.fcl.payer(this.getAuth())
+        ]);
+    }
+    
+    @handleTx
+    async transferNFT(NFTName: string, NFTAddress: string, recipient: string, withdrawID: string, {collectionPublicPath = NFTName + '.CollectionPublicPath',
+        collectionStoragePath = NFTName + '.CollectionStoragePath'} = {}): Promise<string> {
+        return await this.send([
+            this.fcl.transaction(transferNFT.replace(/_NFT_NAME_/g, NFTName).replace(/_NFT_ADDRESS_/g, NFTAddress).replace(/_COLLECTION_PUBLIC_PATH_/g, collectionPublicPath).replace(/_COLLECTION_STORAGE_PATH_/g, collectionStoragePath)),
+            this.fcl.args([this.fcl.arg(recipient, t.Address), this.fcl.arg(withdrawID, t.UInt64)]),
             this.fcl.proposer(this.getAuth()),
             this.fcl.authorizations([this.getAuth()]),
             this.fcl.limit(9999),
