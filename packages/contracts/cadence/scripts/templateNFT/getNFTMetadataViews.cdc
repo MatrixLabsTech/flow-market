@@ -119,7 +119,8 @@ pub fun main(address: Address, id: UInt64): AnyStruct?{
                 "Editions": MetadataViews.getEditions(nft),
                 "Serial": MetadataViews.getSerial(nft),
                 "Medias": MetadataViews.getMedias(nft),
-                "License": MetadataViews.getLicense(nft)
+                "License": MetadataViews.getLicense(nft),
+                "Rarity": MetadataViews.getRarity(nft)
             })
         return ret
 }
