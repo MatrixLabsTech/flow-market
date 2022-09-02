@@ -1,5 +1,5 @@
 import NonFungibleToken from 0xNON_FUNGIBLE_TOKEN_ADDRESS
-import _NFT_NAME_ from _NFT_ADDRESS_
+import __NFT_NAME__ from __NFT_ADDRESS__
 
 pub struct NFTData {
     pub let contract: NFTContractData
@@ -75,17 +75,17 @@ pub struct NFTMedia {
 
 pub fun main(address: Address, id: UInt64): NFTData? {
     let contract = NFTContractData(
-            name: "_NFT_NAME_",
-            address: _NFT_ADDRESS_,
-            storage_path: "_NFT_NAME_.CollectionStoragePath",
-            public_path: "_NFT_NAME_.CollectionPublicPath",
-            public_collection_name: "NonFungibleToken.CollectionPublic, NonFungibleToken.Receiver, _NFT_NAME_._NFT_NAME_CollectionPublic", // interfaces required for initialization
+            name: "__NFT_NAME__",
+            address: __NFT_ADDRESS__,
+            storage_path: "__NFT_NAME__.CollectionStoragePath",
+            public_path: "__NFT_NAME__.CollectionPublicPath",
+            public_collection_name: "NonFungibleToken.CollectionPublic, NonFungibleToken.Receiver, __NFT_NAME__._NFT_NAME_CollectionPublic", // interfaces required for initialization
             external_domain: "https://matrixworld.org",
         )
         let owner = getAccount(address)
         let col= owner
-            .getCapability(_NFT_NAME_.CollectionPublicPath)
-            .borrow<&{_NFT_NAME_._NFT_NAME_CollectionPublic, NonFungibleToken.CollectionPublic}>()
+            .getCapability(__NFT_NAME__.CollectionPublicPath)
+            .borrow<&{__NFT_NAME__._NFT_NAME_CollectionPublic, NonFungibleToken.CollectionPublic}>()
             ?? panic("NFT Collection not found")
         if col == nil { return nil }
 
