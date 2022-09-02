@@ -4,8 +4,8 @@ import NonFungibleToken from 0xNON_FUNGIBLE_TOKEN_ADDRESS
 import FungibleToken from 0xFUNGIBLE_TOKEN_ADDRESS
 import FlowToken from 0xFLOW_TOKEN_ADDRESS
 import FUSD from 0xFUSD_ADDRESS
-import _NFT_NAME_ from _NFT_ADDRESS_
-import _PAYMENT_MINTER_NAME_ from _PAYMENT_MINTER_ADDRESS_
+import __NFT_NAME__ from __NFT_ADDRESS__
+import __PAYMENT_MINTER_NAME__ from __PAYMENT_MINTER_ADDRESS__
 
 transaction(recipient: Address, count: UInt64, price: UFix64, paymentToken: String) {
 
@@ -13,9 +13,9 @@ transaction(recipient: Address, count: UInt64, price: UFix64, paymentToken: Stri
   let collection: &{NonFungibleToken.CollectionPublic}
   
   prepare(signer: AuthAccount) {
-    assert(_PAYMENT_MINTER_NAME_.sale != nil,message:"sale closed")
+    assert(__PAYMENT_MINTER_NAME__.sale != nil,message:"sale closed")
 
-    assert(_PAYMENT_MINTER_NAME_.sale!.max-_PAYMENT_MINTER_NAME_.sale!.current>=count,message:"sale items not enough")
+    assert(__PAYMENT_MINTER_NAME__.sale!.max-__PAYMENT_MINTER_NAME__.sale!.current>=count,message:"sale items not enough")
     var tokenStoragePath = /storage/flowTokenVault
 
     if(paymentToken == "FLOW"){
@@ -28,13 +28,13 @@ transaction(recipient: Address, count: UInt64, price: UFix64, paymentToken: Stri
     self.vault = signer.borrow<&FungibleToken.Vault>(from: tokenStoragePath)
             ?? panic("Cannot borrow vault from signer storage")
     
-    self.collection = getAccount(recipient).getCapability(_COLLECTION_PUBLIC_PATH_).borrow<&{NonFungibleToken.CollectionPublic}>() ?? panic("Cannot borrow NFT collection receiver from account")
+    self.collection = getAccount(recipient).getCapability(__COLLECTION_PUBLIC_PATH__).borrow<&{NonFungibleToken.CollectionPublic}>() ?? panic("Cannot borrow NFT collection receiver from account")
   }
 
   execute {
     var i = 0
     while i < Int(count) {
-      _PAYMENT_MINTER_NAME_.paymentMint(payment: <- self.vault.withdraw(amount: price), recipient: self.collection)
+      __PAYMENT_MINTER_NAME__.paymentMint(payment: <- self.vault.withdraw(amount: price), recipient: self.collection)
       i = i + 1
     }
   }

@@ -1,5 +1,6 @@
 import * as t from '@onflow/types';
 import {fcl, FlowEnv, MatrixMarketTemplateNFTClient} from './src';
+import {getNFTMetadataViews} from './src/cadence/TemplateNFT/getNFTMetadataViews';
 import {MatrixMarketTemplatePaymentMinterClient} from './src/client/MatrixMarketTemplatePaymentMinterClient';
 
 async function main(){
@@ -10,11 +11,7 @@ async function main(){
   
     let ret;
     
-    ret = await c.sendScript(`import FlowNiaPresale from 0xafb8473247d9354c
-    pub fun main(): AnyStruct{
-    return FlowNiaPresale.sale!
-    }
-    `)
+    ret = await c.sendScript(getNFTMetadataViews.replace(/__NFT_NAME__/g, 'Bl0x').replace(/__NFT_ADDRESS__/g, '0x7620acf6d7f2468a').replace(/__COLLECTION_STORAGE_PATH__/g, 'Bl0x.CollectionStoragePath'),[fcl.arg('0x7385fe158fe579ba',t.Address),fcl.arg('208476238',t.UInt64)])
     console.log(`ret:`, ret);
 //     try {
 //       ret = await c.sendScript(
@@ -66,11 +63,11 @@ async function main(){
 //     let ret;
 //
 // //     try {
-// //       ret = await c.sendScript(`import _NFT_NAME_ from _NFT_ADDRESS_
+// //       ret = await c.sendScript(`import __NFT_NAME__ from __NFT_ADDRESS__
 // // pub fun main(): UInt64 {
-// //     return _NFT_NAME_.sale!.current
+// //     return __NFT_NAME__.sale!.current
 // // }
-// // `.replace(/_NFT_NAME_/g,'FlowNiaPresaleTest01').replace(/_NFT_ADDRESS_/g,'0x7f3812b53dd4de20'));
+// // `.replace(/__NFT_NAME__/g,'FlowNiaPresaleTest01').replace(/__NFT_ADDRESS__/g,'0x7f3812b53dd4de20'));
 // //       // ret: /1
 // //       console.log(`ret:`, ret);
 // //     } catch (e: any) {

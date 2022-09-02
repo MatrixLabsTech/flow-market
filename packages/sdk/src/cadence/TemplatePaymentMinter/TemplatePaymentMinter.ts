@@ -1,10 +1,10 @@
 // language=Cadence
 export const TemplatePaymentMinter = `import NonFungibleToken from 0xNON_FUNGIBLE_TOKEN_ADDRESS
 import FungibleToken from 0xFUNGIBLE_TOKEN_ADDRESS
-import _NFT_NAME_ from _NFT_ADDRESS_
+import __NFT_NAME__ from __NFT_ADDRESS__
 
 
-pub contract _PAYMENT_MINTER_NAME_ {
+pub contract __PAYMENT_MINTER_NAME__ {
     pub let AdminStoragePath: StoragePath
     pub var sale: Sale?
 
@@ -54,11 +54,11 @@ pub contract _PAYMENT_MINTER_NAME_ {
 
         receiver.deposit(from: <- payment)
 
-        let minter = self.account.borrow<&_NFT_NAME_.NFTMinter>(from: _NFT_NAME_.MinterStoragePath)!
+        let minter = self.account.borrow<&__NFT_NAME__.NFTMinter>(from: __NFT_NAME__.MinterStoragePath)!
         let metadata: {String:String} = {}
-        let tokenId = _NFT_NAME_.totalSupply
+        let tokenId = __NFT_NAME__.totalSupply
         // metadata code here
-        _METADATA_CODE_
+        __METADATA_CODE__
         
         minter.mintNFT(recipient: recipient, metadata: metadata)
         
@@ -67,7 +67,7 @@ pub contract _PAYMENT_MINTER_NAME_ {
 
     pub resource Administrator {
         pub fun setSale(sale:Sale?){
-            _PAYMENT_MINTER_NAME_.sale = sale
+            __PAYMENT_MINTER_NAME__.sale = sale
         }
     }
     

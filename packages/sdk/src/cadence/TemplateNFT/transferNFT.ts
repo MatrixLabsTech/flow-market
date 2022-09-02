@@ -1,13 +1,13 @@
 // language=Cadence
 export const transferNFT: string = `
 import NonFungibleToken from 0xNON_FUNGIBLE_TOKEN_ADDRESS
-import _NFT_NAME_ from _NFT_ADDRESS_
+import __NFT_NAME__ from __NFT_ADDRESS__
 
 
 transaction(recipient: Address, withdrawID: UInt64) {
 
     /// Reference to the withdrawer's collection
-    let withdrawRef: &_NFT_NAME_.Collection
+    let withdrawRef: &__NFT_NAME__.Collection
 
     /// Reference of the collection to deposit the NFT to
     let depositRef: &{NonFungibleToken.CollectionPublic}
@@ -15,7 +15,7 @@ transaction(recipient: Address, withdrawID: UInt64) {
     prepare(signer: AuthAccount) {
         // borrow a reference to the signer's NFT collection
         self.withdrawRef = signer
-            .borrow<&_NFT_NAME_.Collection>(from: _COLLECTION_STORAGE_PATH_)
+            .borrow<&__NFT_NAME__.Collection>(from: __COLLECTION_STORAGE_PATH__)
             ?? panic("Account does not store an object at the specified path")
 
         // get the recipients public account object
@@ -23,7 +23,7 @@ transaction(recipient: Address, withdrawID: UInt64) {
 
         // borrow a public reference to the receivers collection
         self.depositRef = recipient
-            .getCapability(_COLLECTION_PUBLIC_PATH_)
+            .getCapability(__COLLECTION_PUBLIC_PATH__)
             .borrow<&{NonFungibleToken.CollectionPublic}>()
             ?? panic("Could not borrow a reference to the receiver's collection")
 

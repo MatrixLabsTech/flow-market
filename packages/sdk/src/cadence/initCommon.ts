@@ -8,27 +8,34 @@ import FungibleToken from 0xFUNGIBLE_TOKEN_ADDRESS
 import NFTStorefront from 0xNFT_STOREFRONT
 import MatrixMarketOpenOffer from 0xOPENBID_ADDRESS
 import FUSD from 0xFUSD_ADDRESS
+import FlowToken from 0xFLOW_TOKEN_ADDRESS
 import MetadataViews from 0xMETADATA_VIEWS_ADDRESS
-
 
 transaction {
     prepare(acct: AuthAccount) {
         // init Flow
-        acct.link<&FungibleToken.Vault{FungibleToken.Receiver, FungibleToken.Balance}>
-            (/public/flowTokenReceiver, target: /storage/flowTokenVault)
+        if !acct.getCapability<&{FungibleToken.Balance}>(/public/flowTokenBalance).check(){
+            acct.unlink(/public/flowTokenBalance)
+            acct.link<&{FungibleToken.Balance}>(/public/flowTokenBalance, target: /storage/flowTokenVault)
+        }
+        if !acct.getCapability<&FungibleToken.Vault{FungibleToken.Receiver}>(/public/flowTokenReceiver).check(){
+            acct.unlink(/public/flowTokenReceiver)
+            acct.link<&FlowToken.Vault>(/public/flowTokenReceiver, target: /storage/flowTokenVault)
+        }
         
-        acct.link<&FungibleToken.Vault{FungibleToken.Balance}>
-            (/public/flowTokenBalance, target: /storage/flowTokenVault)
-            
         // init FUSD
         if acct.borrow<&FungibleToken.Vault>(from: /storage/fusdVault) == nil {
             acct.save(<- FUSD.createEmptyVault(), to: /storage/fusdVault)
         }
-        acct.link<&FUSD.Vault{FungibleToken.Receiver}>
-            (/public/fusdReceiver, target: /storage/fusdVault)
-        acct.link<&FUSD.Vault{FungibleToken.Balance}>
-            (/public/fusdBalance, target: /storage/fusdVault)
-            
+        if !acct.getCapability<&FUSD.Vault{FungibleToken.Balance}>(/public/fusdBalance).check(){
+            acct.unlink(/public/fusdBalance)
+            acct.link<&FUSD.Vault{FungibleToken.Balance}>(/public/fusdBalance, target: /storage/fusdVault)
+        }
+        if !acct.getCapability<&FungibleToken.Vault{FungibleToken.Receiver}>(/public/fusdReceiver).check(){
+            acct.unlink(/public/fusdReceiver)
+            acct.link<&FUSD.Vault>(/public/fusdReceiver, target: /storage/fusdVault)
+        }
+        
         if acct.getCapability<&{NonFungibleToken.Provider}>(MatrixMarket.CollectionPublicPath).check(){
             acct.unlink(MatrixMarket.CollectionPublicPath)
             acct.link<&{MatrixMarket.MatrixMarketCollectionPublic, NonFungibleToken.Receiver, NonFungibleToken.CollectionPublic}>(MatrixMarket.CollectionPublicPath, target: MatrixMarket.CollectionStoragePath)

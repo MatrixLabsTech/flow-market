@@ -7,6 +7,7 @@ import MatrixMarket from 0xNFT_ADDRESS
 import FungibleToken from 0xFUNGIBLE_TOKEN_ADDRESS
 import NFTStorefront from 0xNFT_STOREFRONT
 import MatrixMarketOpenOffer from 0xOPENBID_ADDRESS
+import FUSD from 0xFUSD_ADDRESS
 
 pub fun main(addr: Address): Bool {
     var ok = true
@@ -20,7 +21,7 @@ pub fun main(addr: Address): Bool {
     ok = getAccount(addr).getCapability<&{FungibleToken.Receiver}>(/public/fusdReceiver).check()
     if(!ok){return false}
     
-    ok = getAccount(addr).getCapability<&{FungibleToken.Balance}>(/public/fusdBalance).check()
+    ok = getAccount(addr).getCapability<&FUSD.Vault{FungibleToken.Balance}>(/public/fusdBalance).check()
     if(!ok){return false}
 
     ok = !getAccount(addr).getCapability<&{NonFungibleToken.Provider}>(MatrixMarket.CollectionPublicPath).check()

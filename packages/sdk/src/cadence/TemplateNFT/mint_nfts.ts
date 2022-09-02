@@ -1,14 +1,14 @@
 // language=Cadence
 export const templateNFTMintNFTs: string = `
 import NonFungibleToken from 0xNON_FUNGIBLE_TOKEN_ADDRESS
-import _NFT_NAME_ from _NFT_ADDRESS_
+import __NFT_NAME__ from __NFT_ADDRESS__
 
 transaction(recipientBatch: [Address], metadataBatch: [{String:String}]) {
 
-  let minter: &_NFT_NAME_.NFTMinter
+  let minter: &__NFT_NAME__.NFTMinter
 
   prepare(acct: AuthAccount) {
-    self.minter = acct.borrow<&_NFT_NAME_.NFTMinter>(from: _NFT_NAME_.MinterStoragePath)
+    self.minter = acct.borrow<&__NFT_NAME__.NFTMinter>(from: __NFT_NAME__.MinterStoragePath)
             ?? panic("could not borrow minter reference")
   }
 
@@ -23,7 +23,7 @@ transaction(recipientBatch: [Address], metadataBatch: [{String:String}]) {
     while i < size {
       let recipientAccount = getAccount(recipientBatch[i])
       let metadata = metadataBatch[i]
-      let recipient = recipientAccount.getCapability(_COLLECTION_PUBLIC_PATH_).borrow<&{NonFungibleToken.CollectionPublic}>() ?? panic("recipient collection not found")
+      let recipient = recipientAccount.getCapability(__COLLECTION_PUBLIC_PATH__).borrow<&{NonFungibleToken.CollectionPublic}>() ?? panic("recipient collection not found")
       self.minter.mintNFT(recipient: recipient, metadata: metadata)
       
       i = i + 1

@@ -2,7 +2,7 @@
 export const MatrixMarketTemplateNFT: string = `import NonFungibleToken from 0xNON_FUNGIBLE_TOKEN_ADDRESS
 import MetadataViews from 0xMETADATA_VIEWS_ADDRESS
 
-pub contract _NFT_NAME_ : NonFungibleToken {
+pub contract __NFT_NAME__ : NonFungibleToken {
 
     pub var totalSupply: UInt64
 
@@ -71,7 +71,7 @@ pub contract _NFT_NAME_ : NonFungibleToken {
         pub fun deposit(token: @NonFungibleToken.NFT)
         pub fun getIDs(): [UInt64]
         pub fun borrowNFT(id: UInt64): &NonFungibleToken.NFT
-        pub fun borrow_NFT_NAME_(id: UInt64): &_NFT_NAME_.NFT? {
+        pub fun borrow_NFT_NAME_(id: UInt64): &__NFT_NAME__.NFT? {
             post {
                 (result == nil) || (result?.id == id):
                     "Cannot borrow NFT reference: the ID of the returned reference is incorrect"
@@ -99,7 +99,7 @@ pub contract _NFT_NAME_ : NonFungibleToken {
         // deposit takes a NFT and adds it to the collections dictionary
         // and adds the ID to the id array
         pub fun deposit(token: @NonFungibleToken.NFT) {
-            let token <- token as! @_NFT_NAME_.NFT
+            let token <- token as! @__NFT_NAME__.NFT
 
             let id: UInt64 = token.id
 
@@ -122,11 +122,11 @@ pub contract _NFT_NAME_ : NonFungibleToken {
             return (&self.ownedNFTs[id] as &NonFungibleToken.NFT?)!
         }
 
-        pub fun borrow_NFT_NAME_(id: UInt64): &_NFT_NAME_.NFT? {
+        pub fun borrow_NFT_NAME_(id: UInt64): &__NFT_NAME__.NFT? {
             if self.ownedNFTs[id] != nil {
                 // Create an authorized reference to allow downcasting
                 let ref = &self.ownedNFTs[id] as auth &NonFungibleToken.NFT?
-                return ref as! &_NFT_NAME_.NFT?
+                return ref as! &__NFT_NAME__.NFT?
             }
 
             return nil
@@ -134,7 +134,7 @@ pub contract _NFT_NAME_ : NonFungibleToken {
 
         pub fun borrowViewResolver(id: UInt64): &AnyResource{MetadataViews.Resolver} {
             let nft = (&self.ownedNFTs[id] as auth &NonFungibleToken.NFT?)!
-            let mlNFT = nft as! &_NFT_NAME_.NFT
+            let mlNFT = nft as! &__NFT_NAME__.NFT
             return mlNFT
         }
 
@@ -163,7 +163,7 @@ pub contract _NFT_NAME_ : NonFungibleToken {
             let creator = self.owner!.address
             // create a new NFT
             var newNFT <- create NFT(
-                id: _NFT_NAME_.totalSupply,
+                id: __NFT_NAME__.totalSupply,
                 creator: creator,
                 metadata: metadata
             )
@@ -172,7 +172,7 @@ pub contract _NFT_NAME_ : NonFungibleToken {
             // deposit it in the recipient's account using their reference
             recipient.deposit(token: <-newNFT)
 
-            _NFT_NAME_.totalSupply = _NFT_NAME_.totalSupply + 1
+            __NFT_NAME__.totalSupply = __NFT_NAME__.totalSupply + 1
 
             emit Mint(id: tokenRef.id, creator: creator, metadata: metadata)
 
@@ -195,7 +195,7 @@ pub contract _NFT_NAME_ : NonFungibleToken {
         self.account.save(<-collection, to: self.CollectionStoragePath)
 
         // create a public capability for the collection
-        self.account.link<&_NFT_NAME_.Collection{NonFungibleToken.Receiver, NonFungibleToken.CollectionPublic, _NFT_NAME_._NFT_NAME_CollectionPublic, MetadataViews.ResolverCollection}>(
+        self.account.link<&__NFT_NAME__.Collection{NonFungibleToken.Receiver, NonFungibleToken.CollectionPublic, __NFT_NAME__._NFT_NAME_CollectionPublic, MetadataViews.ResolverCollection}>(
             self.CollectionPublicPath,
             target: self.CollectionStoragePath
         )

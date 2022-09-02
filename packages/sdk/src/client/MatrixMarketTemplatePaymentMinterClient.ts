@@ -17,7 +17,7 @@ import {BaseClient, handleScript, handleTx} from './BaseClient';
 export class MatrixMarketTemplatePaymentMinterClient extends BaseClient {
 
     async codeDeploy(NFTName: string, NFTAddress:string, MetadataCode: string, PaymentMinterName = NFTName + 'Presale'): Promise<string> {
-        return TemplatePaymentMinter.replace(/_NFT_NAME_/g, NFTName).replace(/_NFT_ADDRESS_/g, NFTAddress).replace(/_PAYMENT_MINTER_NAME_/g, PaymentMinterName).replace(/0xFUSD_ADDRESS/g, await this.fcl.config().get('0xFUSD_ADDRESS')).replace(/0xNON_FUNGIBLE_TOKEN_ADDRESS/g, await this.fcl.config().get('0xNON_FUNGIBLE_TOKEN_ADDRESS')).replace(/0xFUNGIBLE_TOKEN_ADDRESS/g, await this.fcl.config().get('0xFUNGIBLE_TOKEN_ADDRESS')).replace(/_METADATA_CODE_/g, MetadataCode)
+        return TemplatePaymentMinter.replace(/__NFT_NAME__/g, NFTName).replace(/__NFT_ADDRESS__/g, NFTAddress).replace(/__PAYMENT_MINTER_NAME__/g, PaymentMinterName).replace(/0xFUSD_ADDRESS/g, await this.fcl.config().get('0xFUSD_ADDRESS')).replace(/0xNON_FUNGIBLE_TOKEN_ADDRESS/g, await this.fcl.config().get('0xNON_FUNGIBLE_TOKEN_ADDRESS')).replace(/0xFUNGIBLE_TOKEN_ADDRESS/g, await this.fcl.config().get('0xFUNGIBLE_TOKEN_ADDRESS')).replace(/__METADATA_CODE__/g, MetadataCode)
     }
     
     @handleTx
@@ -27,7 +27,7 @@ export class MatrixMarketTemplatePaymentMinterClient extends BaseClient {
             this.fcl.transaction(code),
             this.fcl.args([
                 this.fcl.arg(PaymentMinterName, t.String),
-                this.fcl.arg(Buffer.from(TemplatePaymentMinter.replace(/_NFT_NAME_/g, NFTName).replace(/_NFT_ADDRESS_/g, NFTAddress).replace(/_PAYMENT_MINTER_NAME_/g, PaymentMinterName).replace(/0xFUSD_ADDRESS/g, await this.fcl.config().get('0xFUSD_ADDRESS')).replace(/0xNON_FUNGIBLE_TOKEN_ADDRESS/g, await this.fcl.config().get('0xNON_FUNGIBLE_TOKEN_ADDRESS')).replace(/0xFUNGIBLE_TOKEN_ADDRESS/g, await this.fcl.config().get('0xFUNGIBLE_TOKEN_ADDRESS')).replace(/_METADATA_CODE_/g, MetadataCode), 'utf8').toString('hex'), t.String)
+                this.fcl.arg(Buffer.from(TemplatePaymentMinter.replace(/__NFT_NAME__/g, NFTName).replace(/__NFT_ADDRESS__/g, NFTAddress).replace(/__PAYMENT_MINTER_NAME__/g, PaymentMinterName).replace(/0xFUSD_ADDRESS/g, await this.fcl.config().get('0xFUSD_ADDRESS')).replace(/0xNON_FUNGIBLE_TOKEN_ADDRESS/g, await this.fcl.config().get('0xNON_FUNGIBLE_TOKEN_ADDRESS')).replace(/0xFUNGIBLE_TOKEN_ADDRESS/g, await this.fcl.config().get('0xFUNGIBLE_TOKEN_ADDRESS')).replace(/__METADATA_CODE__/g, MetadataCode), 'utf8').toString('hex'), t.String)
             ]),
             this.fcl.proposer(this.getAuth()),
             this.fcl.authorizations([this.getAuth()]),
@@ -39,7 +39,7 @@ export class MatrixMarketTemplatePaymentMinterClient extends BaseClient {
     @handleTx
     async paymentMintNFTs(NFTName: string, NFTAddress: string, PaymentMinterName: string, PaymentMinterAddress: string, recipient: string, count:string, price:string, paymentToken = 'FLOW', {collectionPublicPath = NFTName + '.CollectionPublicPath'} = {}): Promise<string> {
         return await this.send([
-            this.fcl.transaction(paymentMintNFTs.replace(/_NFT_NAME_/g, NFTName).replace(/_NFT_ADDRESS_/g, NFTAddress).replace(/_COLLECTION_PUBLIC_PATH_/g, collectionPublicPath).replace(/_PAYMENT_MINTER_NAME_/g, PaymentMinterName).replace(/_PAYMENT_MINTER_ADDRESS_/g, PaymentMinterAddress)),
+            this.fcl.transaction(paymentMintNFTs.replace(/__NFT_NAME__/g, NFTName).replace(/__NFT_ADDRESS__/g, NFTAddress).replace(/__COLLECTION_PUBLIC_PATH__/g, collectionPublicPath).replace(/__PAYMENT_MINTER_NAME__/g, PaymentMinterName).replace(/__PAYMENT_MINTER_ADDRESS__/g, PaymentMinterAddress)),
             this.fcl.args([this.fcl.arg(recipient, t.Address), this.fcl.arg(count, t.UInt64), this.fcl.arg(price, t.UFix64), this.fcl.arg(paymentToken, t.String)]),
             this.fcl.proposer(this.getAuth()),
             this.fcl.authorizations([this.getAuth()]),
@@ -56,7 +56,7 @@ export class MatrixMarketTemplatePaymentMinterClient extends BaseClient {
              endTime: string|undefined,
              max: string): Promise<string> {
         return await this.send([
-            this.fcl.transaction(setSale.replace(/_PAYMENT_MINTER_NAME_/g, PaymentMinterName).replace(/_PAYMENT_MINTER_ADDRESS_/g, PaymentMinterAddress)),
+            this.fcl.transaction(setSale.replace(/__PAYMENT_MINTER_NAME__/g, PaymentMinterName).replace(/__PAYMENT_MINTER_ADDRESS__/g, PaymentMinterAddress)),
             this.fcl.args([this.fcl.arg(price, t.UFix64),
                 this.fcl.arg(paymentToken, t.String),
                 this.fcl.arg(receiverAddr, t.Address),
@@ -73,7 +73,7 @@ export class MatrixMarketTemplatePaymentMinterClient extends BaseClient {
     @handleScript
     async getPrice(PaymentMinterName: string, PaymentMinterAddress: string): Promise<string> {
         return await this.send([
-            this.fcl.script(getPrice.replace(/_PAYMENT_MINTER_NAME_/g, PaymentMinterName).replace(/_PAYMENT_MINTER_ADDRESS_/g, PaymentMinterAddress)),
+            this.fcl.script(getPrice.replace(/__PAYMENT_MINTER_NAME__/g, PaymentMinterName).replace(/__PAYMENT_MINTER_ADDRESS__/g, PaymentMinterAddress)),
             this.fcl.limit(9999)
         ]);
     }
@@ -81,7 +81,7 @@ export class MatrixMarketTemplatePaymentMinterClient extends BaseClient {
     @handleScript
     async getRemaining(PaymentMinterName: string, PaymentMinterAddress: string): Promise<string> {
         return await this.send([
-            this.fcl.script(getRemaining.replace(/_PAYMENT_MINTER_NAME_/g, PaymentMinterName).replace(/_PAYMENT_MINTER_ADDRESS_/g, PaymentMinterAddress)),
+            this.fcl.script(getRemaining.replace(/__PAYMENT_MINTER_NAME__/g, PaymentMinterName).replace(/__PAYMENT_MINTER_ADDRESS__/g, PaymentMinterAddress)),
             this.fcl.limit(9999)
         ]);
     }

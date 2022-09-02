@@ -34,7 +34,7 @@ transaction(listed: [UInt64], bidId: UInt64, openOfferAddress: Address) {
         self.storefront = acct.borrow<&NFTStorefront.Storefront>(from: NFTStorefront.StorefrontStoragePath) ?? panic("can't borrow storefront")
         
         let nftCollection = acct.borrow<&0xsupportedNFTName.Collection>(
-            from: 0xsupportedNFTName.CollectionStoragePath
+            from: __COLLECTION_STORAGE_PATH__
         ) ?? panic("Cannot borrow NFT collection receiver from account")
         self.nft <- nftCollection.withdraw(withdrawID: nftId)
 

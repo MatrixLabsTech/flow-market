@@ -1,6 +1,6 @@
 // language=Cadence
 export const setSale: string = `
-import _PAYMENT_MINTER_NAME_ from _PAYMENT_MINTER_ADDRESS_
+import __PAYMENT_MINTER_NAME__ from __PAYMENT_MINTER_ADDRESS__
 import FungibleToken from 0xFUNGIBLE_TOKEN_ADDRESS
 import FlowToken from 0xFLOW_TOKEN_ADDRESS
 import FUSD from 0xFUSD_ADDRESS
@@ -12,9 +12,9 @@ transaction(
             startTime: UFix64?,
             endTime: UFix64?,
             max: UInt64) {
-  let admin: &_PAYMENT_MINTER_NAME_.Administrator
+  let admin: &__PAYMENT_MINTER_NAME__.Administrator
   prepare(signer: AuthAccount) {
-    self.admin = signer.borrow<&_PAYMENT_MINTER_NAME_.Administrator>(from: _PAYMENT_MINTER_NAME_.AdminStoragePath) ?? panic("Cannot borrow admin")
+    self.admin = signer.borrow<&__PAYMENT_MINTER_NAME__.Administrator>(from: __PAYMENT_MINTER_NAME__.AdminStoragePath) ?? panic("Cannot borrow admin")
   }
 
   execute {
@@ -34,10 +34,10 @@ transaction(
         let receiver = getAccount(receiverAddr).getCapability<&{FungibleToken.Receiver}>(tokenReceiverPath)!
         assert(receiver.check(), message: "Missing or mis-typed FungibleToken receiver")
         var current = UInt64(0)
-        if(_PAYMENT_MINTER_NAME_.sale !=nil){
-            current = _PAYMENT_MINTER_NAME_.sale!.current
+        if(__PAYMENT_MINTER_NAME__.sale !=nil){
+            current = __PAYMENT_MINTER_NAME__.sale!.current
         }
-    self.admin.setSale(sale: _PAYMENT_MINTER_NAME_.Sale(price,
+    self.admin.setSale(sale: __PAYMENT_MINTER_NAME__.Sale(price,
             salePaymentVaultType,
             receiver,
              startTime,

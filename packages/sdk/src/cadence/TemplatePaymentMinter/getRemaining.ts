@@ -1,10 +1,10 @@
 // language=Cadence
 export const getRemaining = `
-import _PAYMENT_MINTER_NAME_ from _PAYMENT_MINTER_ADDRESS_
+import __PAYMENT_MINTER_NAME__ from __PAYMENT_MINTER_ADDRESS__
 
 pub fun main(): UInt64 {
-    if(_PAYMENT_MINTER_NAME_.sale == nil){
+    if(__PAYMENT_MINTER_NAME__.sale == nil){
       return 0
     }
-    return _PAYMENT_MINTER_NAME_.sale!.max-_PAYMENT_MINTER_NAME_.sale!.current
+    return __PAYMENT_MINTER_NAME__.sale!.max-__PAYMENT_MINTER_NAME__.sale!.current
 }`;

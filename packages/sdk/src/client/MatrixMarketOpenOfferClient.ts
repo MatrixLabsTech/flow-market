@@ -22,9 +22,9 @@ export class MatrixMarketOpenOfferClient extends BaseClient {
     }
     
     @handleTx
-    public async acceptOffer(listed: string[], supportedNFTName: string, supportedNFTAddress: string, offerResourceId: number, openOfferAddress: string): Promise<string> {
+    public async acceptOffer(listed: string[], supportedNFTName: string, supportedNFTAddress: string, offerResourceId: number, openOfferAddress: string, {collectionStoragePath = supportedNFTName+'.CollectionStoragePath'}={}): Promise<string> {
         return await this.send([
-                this.fcl.transaction(acceptOffer.replace(/0xsupportedNFTName/g, supportedNFTName).replace(/0xsupportedNFTAddress/g, supportedNFTAddress)),
+                this.fcl.transaction(acceptOffer.replace(/0xsupportedNFTName/g, supportedNFTName).replace(/0xsupportedNFTAddress/g, supportedNFTAddress).replace(/__COLLECTION_STORAGE_PATH__/g, collectionStoragePath)),
                 this.fcl.args([this.fcl.arg(listed, t.Array(t.UInt64)), this.fcl.arg(offerResourceId, t.UInt64), this.fcl.arg(openOfferAddress, t.Address)]),
                 this.fcl.proposer(this.getAuth()),
                 this.fcl.authorizations([this.getAuth()]),
@@ -45,9 +45,9 @@ export class MatrixMarketOpenOfferClient extends BaseClient {
     }
     
     @handleTx
-    public async openOffer(supportedNFTName:string, supportedNFTAddress:string,nftId: number, amount: string, paymentToken: string, royaltyReceivers: string[], royaltyAmount: string[], expirationTime: string): Promise<string> {
+    public async openOffer(supportedNFTName:string, supportedNFTAddress:string,nftId: number, amount: string, paymentToken: string, royaltyReceivers: string[], royaltyAmount: string[], expirationTime: string, {collectionPublicPath=supportedNFTName+'.CollectionPublicPath'}={}): Promise<string> {
         return await this.send([
-                this.fcl.transaction(openOffer.replace(/0xsupportedNFTName/g, supportedNFTName).replace(/0xsupportedNFTAddress/g, supportedNFTAddress)),
+                this.fcl.transaction(openOffer.replace(/0xsupportedNFTName/g, supportedNFTName).replace(/0xsupportedNFTAddress/g, supportedNFTAddress).replace(/__COLLECTION_PUBLIC_PATH__/g, collectionPublicPath)),
                 this.fcl.args([
                   this.fcl.arg(nftId, t.UInt64),
                     this.fcl.arg(amount, t.UFix64),

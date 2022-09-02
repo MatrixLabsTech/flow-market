@@ -30,7 +30,7 @@ transaction(nftId: UInt64, amount: UFix64, paymentToken: String, royaltyReceiver
             panic("unsupported paymentToken")
         }
         
-        self.nftReceiver = acct.getCapability<&{NonFungibleToken.CollectionPublic}>(0xsupportedNFTName.CollectionPublicPath)!
+        self.nftReceiver = acct.getCapability<&{NonFungibleToken.CollectionPublic}>(__COLLECTION_PUBLIC_PATH__)!
         assert(self.nftReceiver.check(), message: "Missing or mis-typed 0xsupportedNFTName receiver")
 
         if !acct.getCapability<&{FungibleToken.Provider,FungibleToken.Balance,FungibleToken.Receiver}>(vaultRefPrivatePath)!.check() {
