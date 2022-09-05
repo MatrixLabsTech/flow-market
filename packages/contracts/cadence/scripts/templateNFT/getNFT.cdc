@@ -79,17 +79,17 @@ pub fun main(address: Address, id: UInt64): NFTData? {
             address: __NFT_ADDRESS__,
             storage_path: "__NFT_NAME__.CollectionStoragePath",
             public_path: "__NFT_NAME__.CollectionPublicPath",
-            public_collection_name: "NonFungibleToken.CollectionPublic, NonFungibleToken.Receiver, __NFT_NAME__._NFT_NAME_CollectionPublic", // interfaces required for initialization
+            public_collection_name: "NonFungibleToken.CollectionPublic, NonFungibleToken.Receiver, __NFT_NAME__.__NFT_NAME__CollectionPublic", // interfaces required for initialization
             external_domain: "https://matrixworld.org",
         )
         let owner = getAccount(address)
         let col= owner
             .getCapability(__NFT_NAME__.CollectionPublicPath)
-            .borrow<&{__NFT_NAME__._NFT_NAME_CollectionPublic, NonFungibleToken.CollectionPublic}>()
+            .borrow<&{__NFT_NAME__.__NFT_NAME__CollectionPublic, NonFungibleToken.CollectionPublic}>()
             ?? panic("NFT Collection not found")
         if col == nil { return nil }
 
-        let nft = col!.borrow_NFT_NAME_(id: id)
+        let nft = col!.borrow__NFT_NAME__(id: id)
         if nft == nil { return nil }
 
         let metadata = nft!.getRawMetadata()
