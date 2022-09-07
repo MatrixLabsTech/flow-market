@@ -193,8 +193,8 @@ pub contract __NFT_NAME__ : NonFungibleToken {
         // Set the named paths
         self.CollectionStoragePath = /storage/MatrixMarket__NFT_NAME__Collection
         self.CollectionPublicPath = /public/MatrixMarket__NFT_NAME__Collection
-        self.MinterStoragePath = /storage/MatrixMarket_NFT_NAME_Minter
-        self.MinterPublicPath = /public/MatrixMarket_NFT_NAME_Minter
+        self.MinterStoragePath = /storage/MatrixMarket__NFT_NAME__Minter
+        self.MinterPublicPath = /public/MatrixMarket__NFT_NAME__Minter
 
         // Create a Collection resource and save it to storage
         let collection <- create Collection()

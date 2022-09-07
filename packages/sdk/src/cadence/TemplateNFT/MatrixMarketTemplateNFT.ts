@@ -67,11 +67,11 @@ pub contract __NFT_NAME__ : NonFungibleToken {
         }
     }
 
-    pub resource interface _NFT_NAME_CollectionPublic {
+    pub resource interface __NFT_NAME__CollectionPublic {
         pub fun deposit(token: @NonFungibleToken.NFT)
         pub fun getIDs(): [UInt64]
         pub fun borrowNFT(id: UInt64): &NonFungibleToken.NFT
-        pub fun borrow_NFT_NAME_(id: UInt64): &__NFT_NAME__.NFT? {
+        pub fun borrow__NFT_NAME__(id: UInt64): &__NFT_NAME__.NFT? {
             post {
                 (result == nil) || (result?.id == id):
                     "Cannot borrow NFT reference: the ID of the returned reference is incorrect"
@@ -79,7 +79,7 @@ pub contract __NFT_NAME__ : NonFungibleToken {
         }
     }
 
-    pub resource Collection: _NFT_NAME_CollectionPublic, NonFungibleToken.Provider, NonFungibleToken.Receiver, NonFungibleToken.CollectionPublic, MetadataViews.ResolverCollection {
+    pub resource Collection: __NFT_NAME__CollectionPublic, NonFungibleToken.Provider, NonFungibleToken.Receiver, NonFungibleToken.CollectionPublic, MetadataViews.ResolverCollection {
         
         pub var ownedNFTs: @{UInt64: NonFungibleToken.NFT}
 
@@ -122,7 +122,7 @@ pub contract __NFT_NAME__ : NonFungibleToken {
             return (&self.ownedNFTs[id] as &NonFungibleToken.NFT?)!
         }
 
-        pub fun borrow_NFT_NAME_(id: UInt64): &__NFT_NAME__.NFT? {
+        pub fun borrow__NFT_NAME__(id: UInt64): &__NFT_NAME__.NFT? {
             if self.ownedNFTs[id] != nil {
                 // Create an authorized reference to allow downcasting
                 let ref = &self.ownedNFTs[id] as auth &NonFungibleToken.NFT?
@@ -185,17 +185,17 @@ pub contract __NFT_NAME__ : NonFungibleToken {
         self.totalSupply = 0
 
         // Set the named paths
-        self.CollectionStoragePath = /storage/MatrixMarket_NFT_NAME_Collection
-        self.CollectionPublicPath = /public/MatrixMarket_NFT_NAME_Collection
-        self.MinterStoragePath = /storage/MatrixMarket_NFT_NAME_Minter
-        self.MinterPublicPath = /public/MatrixMarket_NFT_NAME_Minter
+        self.CollectionStoragePath = /storage/MatrixMarket__NFT_NAME__Collection
+        self.CollectionPublicPath = /public/MatrixMarket__NFT_NAME__Collection
+        self.MinterStoragePath = /storage/MatrixMarket__NFT_NAME__Minter
+        self.MinterPublicPath = /public/MatrixMarket__NFT_NAME__Minter
 
         // Create a Collection resource and save it to storage
         let collection <- create Collection()
         self.account.save(<-collection, to: self.CollectionStoragePath)
 
         // create a public capability for the collection
-        self.account.link<&__NFT_NAME__.Collection{NonFungibleToken.Receiver, NonFungibleToken.CollectionPublic, __NFT_NAME__._NFT_NAME_CollectionPublic, MetadataViews.ResolverCollection}>(
+        self.account.link<&__NFT_NAME__.Collection{NonFungibleToken.Receiver, NonFungibleToken.CollectionPublic, __NFT_NAME__.__NFT_NAME__CollectionPublic, MetadataViews.ResolverCollection}>(
             self.CollectionPublicPath,
             target: self.CollectionStoragePath
         )
