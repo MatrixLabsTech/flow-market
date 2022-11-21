@@ -20,7 +20,7 @@ transaction {
         }
         if !acct.getCapability<&FungibleToken.Vault{FungibleToken.Receiver}>(/public/flowTokenReceiver).check(){
             acct.unlink(/public/flowTokenReceiver)
-            acct.link<&FlowToken.Vault>(/public/flowTokenReceiver, target: /storage/flowTokenVault)
+            acct.link<&FlowToken.Vault{FungibleToken.Receiver}>(/public/flowTokenReceiver, target: /storage/flowTokenVault)
         }
         
         // init FUSD
@@ -33,7 +33,7 @@ transaction {
         }
         if !acct.getCapability<&FungibleToken.Vault{FungibleToken.Receiver}>(/public/fusdReceiver).check(){
             acct.unlink(/public/fusdReceiver)
-            acct.link<&FUSD.Vault>(/public/fusdReceiver, target: /storage/fusdVault)
+            acct.link<&FUSD.Vault{FungibleToken.Receiver}>(/public/fusdReceiver, target: /storage/fusdVault)
         }
         
         if acct.getCapability<&{NonFungibleToken.Provider}>(MatrixMarket.CollectionPublicPath).check(){
