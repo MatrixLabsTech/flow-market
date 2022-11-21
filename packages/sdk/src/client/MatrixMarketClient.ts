@@ -8,6 +8,8 @@ import {initNFTCollection} from '../cadence/init_nfts_collection';
 import {initCommon} from '../cadence/initCommon';
 import {mintNFTs} from '../cadence/mint_nfts';
 import {BaseClient, handleScript, handleTx} from './BaseClient';
+import { checkNeedRepair } from '../cadence/checkNeedRepair';
+import { repair } from '../cadence/repair';
 
 
 export class MatrixMarketClient extends BaseClient {
@@ -79,6 +81,26 @@ export class MatrixMarketClient extends BaseClient {
     async initCommon(): Promise<string> {
         return await this.send([
                 this.fcl.transaction(initCommon),
+                this.fcl.proposer(this.getAuth()),
+                this.fcl.authorizations([this.getAuth()]),
+                this.fcl.limit(9999),
+                this.fcl.payer(this.getAuth())
+            ]);
+    }
+    
+    @handleScript
+    async checkNeedRepair(address: string): Promise<boolean> {
+        return this.send([
+                this.fcl.script(checkNeedRepair),
+                this.fcl.args([this.fcl.arg(address, t.Address)]),
+                this.fcl.limit(9999)
+            ]);
+    }
+    
+    @handleTx
+    async repair(): Promise<string> {
+        return await this.send([
+                this.fcl.transaction(repair),
                 this.fcl.proposer(this.getAuth()),
                 this.fcl.authorizations([this.getAuth()]),
                 this.fcl.limit(9999),
